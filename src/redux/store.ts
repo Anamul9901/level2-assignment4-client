@@ -11,6 +11,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import authReducer from "./features/auth/authSlice";
+import persistStore from "redux-persist/lib/persistStore";
 
 const persistConfig = {
   key: "auth",
@@ -35,3 +36,5 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
+
+export const persistor = persistStore(store)
