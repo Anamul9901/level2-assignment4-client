@@ -31,8 +31,8 @@ const Product = () => {
     const title = form.title.value;
     const image = form.image.value;
     const category = form.category.value;
-    const price = form.price.value;
-    const quantity = form.quantity.value;
+    const price = Number(form.price.value);
+    const quantity = Number(form.quantity.value);
 
     const options = {
       id: productId,
@@ -52,7 +52,10 @@ const Product = () => {
   return (
     <div className="py-16 mb-10">
       <div>
-        <Link to={'/add-product'} className="btn-primary p-1 bg-green-400 rounded-md text-white font-bold">
+        <Link
+          to={"/add-product"}
+          className="btn-primary p-1 bg-green-400 rounded-md text-white font-bold"
+        >
           Add Product
         </Link>
       </div>

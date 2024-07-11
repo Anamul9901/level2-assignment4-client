@@ -41,7 +41,7 @@ const productsApi = baseApi.injectEndpoints({
         return {
           url: `/products/${options?.id}`,
           method: "PUT",
-          data: options.data,
+          body: options.data
         };
       },
       invalidatesTags: ["product"],
