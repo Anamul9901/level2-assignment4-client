@@ -1,31 +1,30 @@
+/* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import {
   useDeleteProductMutation,
   useGetAllProductQuery,
+  useUpdateProductMutation,
 } from "../../redux/features/products/products";
+import { Link } from "react-router-dom";
 
 const Product = () => {
   const [productId, setProductId] = useState("");
   const { data } = useGetAllProductQuery(undefined);
   const products = data?.data;
-  // console.log(products);
 
-  const [deleteProduct, { error }] = useDeleteProductMutation();
-  console.log("product error=>", error);
+  const [deleteProduct, {}] = useDeleteProductMutation();
+  const [updateProduct, {}] = useUpdateProductMutation();
 
   const handleProductDelete = async (id: string) => {
-    console.log(id);
-    const res = await deleteProduct(id);
-    console.log("res delete data", res);
+    await deleteProduct(id);
   };
 
   const handleUpdatePrductId = (id: any) => {
     setProductId(id);
   };
-  console.log(productId);
 
-  const handleProductUpdate = (e: any) => {
+  const handleProductUpdate = async (e: any) => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
@@ -35,12 +34,28 @@ const Product = () => {
     const price = form.price.value;
     const quantity = form.quantity.value;
 
-    const productUpdatedDate = { name, title, image, category, price, quantity };
-    console.log(productUpdatedDate);
+    const options = {
+      id: productId,
+      data: {
+        name,
+        title,
+        image,
+        category,
+        price,
+        quantity,
+      },
+    };
+    const res = await updateProduct(options);
+    console.log("updted res data =>", res);
   };
 
   return (
     <div className="py-16 mb-10">
+      <div>
+        <Link to={'/add-product'} className="btn-primary p-1 bg-green-400 rounded-md text-white font-bold">
+          Add Product
+        </Link>
+      </div>
       <h2 className="md:text-4xl text-xl pb-10 text-center font-bold">
         Just For You
         <span className="text-sm text-[#f76b00]">(Sold Products)</span>

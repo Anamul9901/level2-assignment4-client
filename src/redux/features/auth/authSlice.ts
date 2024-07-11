@@ -4,6 +4,7 @@ import { RootState } from "../../store";
 export type TUser = {
   email: string;
   password: string;
+  _id?: string;
 };
 type TAuthState = {
   user: null | TUser;
