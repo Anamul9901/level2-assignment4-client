@@ -6,7 +6,7 @@ import {
   useGetAllProductQuery,
   useUpdateProductMutation,
 } from "../../redux/features/products/products";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 
 const Product = () => {
   const [productId, setProductId] = useState("");
@@ -67,6 +67,7 @@ const Product = () => {
         <div className="grid  grid-cols-2 px-1 md:px-0 md:grid-cols-4 lg:grid-cols-5 gap-3  ">
           {products?.map((product: any) => (
             <div key={product?._id}>
+              <Link to={`/product/${product?._id}`}>
               <div className=" bg-base-100 shadow-xl  h-full">
                 <figure>
                   <img src={product.image} alt="" />
@@ -175,7 +176,7 @@ const Product = () => {
                     </div>
                   </dialog>
                 </div>
-              </div>
+              </div></Link>
             </div>
           ))}
         </div>
