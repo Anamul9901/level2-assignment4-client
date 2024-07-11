@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from "react";
 import {
   useDeleteProductMutation,
   useGetAllProductQuery,
 } from "../../redux/features/products/products";
 
 const Product = () => {
+  const [productId, setProductId] = useState("");
   const { data } = useGetAllProductQuery(undefined);
   const products = data?.data;
   // console.log(products);
@@ -16,6 +18,25 @@ const Product = () => {
     console.log(id);
     const res = await deleteProduct(id);
     console.log("res delete data", res);
+  };
+
+  const handleUpdatePrductId = (id: any) => {
+    setProductId(id);
+  };
+  console.log(productId);
+
+  const handleProductUpdate = (e: any) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const title = form.title.value;
+    const image = form.image.value;
+    const category = form.category.value;
+    const price = form.price.value;
+    const quantity = form.quantity.value;
+
+    const productUpdatedDate = { name, title, image, category, price, quantity };
+    console.log(productUpdatedDate);
   };
 
   return (
@@ -51,9 +72,90 @@ const Product = () => {
                   >
                     Delete
                   </button>
-                  <button className="btn-primary btn-sm bg-green-400 rounded-md text-white font-semibold">
-                    Update
-                  </button>
+
+                  {/* --------------product update modal------------- */}
+                  {/* You can open the modal using document.getElementById('ID').showModal() method */}
+                  <div onClick={() => handleUpdatePrductId(product?._id)}>
+                    <button
+                      className="btn-primary btn-sm bg-green-400 rounded-md text-white font-semibold"
+                      onClick={() =>
+                        (document as any)
+                          .getElementById("my_modal_3")
+                          .showModal(product._id)
+                      }
+                    >
+                      Update
+                    </button>
+                  </div>
+                  <dialog id="my_modal_3" className="modal">
+                    <div className="modal-box">
+                      <form method="dialog">
+                        {/* if there is a button in form, it will close the modal */}
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                          ✕
+                        </button>
+                      </form>
+                      <h3 className="font-bold text-lg">Hello!</h3>
+                      <p className="py-4">
+                        Press ESC key or click on ✕ button to close
+                      </p>
+                      <form onSubmit={handleProductUpdate}>
+                        <div className="flex gap-1 pb-3">
+                          <input
+                            type="text"
+                            placeholder="Product Name"
+                            className="input input-bordered w-full max-w-xs"
+                            name="name"
+                          />
+                          <input
+                            type="text"
+                            placeholder="Product Title"
+                            className="input input-bordered w-full max-w-xs"
+                            name="title"
+                          />
+                        </div>
+
+                        <div className="flex gap-1 pb-3">
+                          <input
+                            type="img"
+                            placeholder="Img URL"
+                            className="input input-bordered w-full max-w-xs"
+                            name="image"
+                          />
+                          <input
+                            type="text"
+                            placeholder="Category"
+                            className="input input-bordered w-full max-w-xs"
+                            name="category"
+                          />
+                        </div>
+
+                        <div className="flex gap-1 pb-3">
+                          <input
+                            type="number"
+                            placeholder="Price"
+                            className="input input-bordered w-full max-w-xs"
+                            name="price"
+                          />
+                          <input
+                            type="number"
+                            placeholder="Quantity"
+                            className="input input-bordered w-full max-w-xs"
+                            name="quantity"
+                          />
+                        </div>
+
+                        <div className="flex justify-end">
+                          <button
+                            type="submit"
+                            className="btn-primary btn-sm bg-green-400 rounded-md text-white font-semibol"
+                          >
+                            Update
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </dialog>
                 </div>
               </div>
             </div>
