@@ -3,7 +3,7 @@ import { Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../redux/hooks";
 import { useLoginMutation } from "../redux/features/auth/authApi";
-import { setUser } from "../redux/features/auth/authSlice";
+import {  setUser } from "../redux/features/auth/authSlice";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -15,11 +15,13 @@ const Login = () => {
       email: values.email,
       password: values.password,
     };
-    const res = await login(userInfo);
+    const res = await login(userInfo).unwrap();
 
-    console.log("Received values of form: ", values);
-    console.log("Received res of form: ", res);
-    dispatch(setUser({ user: values }));
+    console.log("Received values of form: ", values.user);
+    console.log("Received res of form: ", res.data);
+    const { _id, email } = res.data;
+    const finalResData = { _id, email };
+    dispatch(setUser({ user: finalResData }));
   };
   return (
     <div>
@@ -36,6 +38,7 @@ const Login = () => {
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="email"
+            defaultValue={"admin01@gmail.com"}
           />
         </Form.Item>
         <Form.Item
@@ -46,6 +49,7 @@ const Login = () => {
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Password"
+            defaultValue={"admin01"}
           />
         </Form.Item>
         <Form.Item>

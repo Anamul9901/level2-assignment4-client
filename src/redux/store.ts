@@ -9,9 +9,9 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
+  persistStore,
 } from "redux-persist";
 import authReducer from "./features/auth/authSlice";
-import persistStore from "redux-persist/lib/persistStore";
 
 const persistConfig = {
   key: "auth",
