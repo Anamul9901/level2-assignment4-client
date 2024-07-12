@@ -15,32 +15,30 @@ const CheckoutForm = () => {
 
   const { data } = useGetAllCartQuery(undefined);
   const cartData = data?.data;
-  console.log(cartData);
+  // console.log(cartData);
   const user = useAppSelector(selectCurrentUser);
   // console.log(user?._id);
 
   const currentUserCart = cartData?.filter(
     (cart: any) => cart.userId == user?._id
   );
-  console.log("all cart", currentUserCart);
+  // console.log("all cart", currentUserCart);
 
   let totalPrice = 0;
   for (let i = 0; i < currentUserCart?.length; i++) {
     totalPrice += currentUserCart[i]?.productId?.price;
   }
-  console.log(totalPrice); // Output: 80
+  // console.log(totalPrice); // Output: 80
 
   const [createPayment, { isError }] = useCreatePaymentMutation();
 
-  console.log('res error', isError);
+  // console.log("res error", isError);
 
-  useEffect(()=>{
+  useEffect(() => {
     const res = createPayment(totalPrice);
-    console.log('res data===>', res);
-    setClientSecret(res as any)
-  },[totalPrice])
-
-
+    console.log("res data===>", res);
+    setClientSecret(res as any);
+  }, [totalPrice]);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -66,10 +64,30 @@ const CheckoutForm = () => {
       console.log("payment method", paymentMethod);
       setError("");
     }
-  };
+    // confirm payment
+    const { paymentIntent, error: confirmError } =
+      await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: card,
+          billing_details: {
+            email: user?.email || "anonymous",
+            name: user?.name || "anonymous",
+          },
+        },
+      });
+
+    if (confirmError) {
+      console.log("confirm error");
+    } else {
+      console.log("Pyment intent", paymentIntent);
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit}>
+      <div>
+        <p>Total Amount: {totalPrice}</p>
+      </div>
       <CardElement
         options={{
           style: {

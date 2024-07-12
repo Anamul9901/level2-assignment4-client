@@ -5,7 +5,7 @@ import CheckoutForm from "./CheckoutForm";
 const Payment = () => {
   // TODO: add publishable key
   const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway);
-  console.log(stripePromise);
+  // console.log(stripePromise);
   return (
     <div className="h-[90vh] max-w-7xl mx-auto w-full">
       <div className="flex justify-center py-20">

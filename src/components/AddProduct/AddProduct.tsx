@@ -1,3 +1,4 @@
+/* eslint-disable no-empty-pattern */
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import { useCreateProductMutation } from "../../redux/features/products/products";
 import { useAppSelector } from "../../redux/hooks";
@@ -37,67 +38,72 @@ const AddProduct = () => {
     // }
   };
   return (
-    <div className="max-w-7xl mx-auto w-full">
-      <div className="flex items-center justify-center py-14">
-        <form onSubmit={handleAddProduct}>
-          <div className="flex gap-1 pb-3">
-            <input
-              type="text"
-              placeholder="Product Name"
-              className="input input-bordered w-full max-w-xs"
-              name="name"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Product Title"
-              className="input input-bordered w-full max-w-xs"
-              name="title"
-            />
-          </div>
-
-          <div className="flex gap-1 pb-3">
-            <input
-              type="img"
-              placeholder="Img URL"
-              className="input input-bordered w-full max-w-xs"
-              name="image"
-            />
-            <input
-              type="text"
-              placeholder="Category"
-              className="input input-bordered w-full max-w-xs"
-              name="category"
-              required
-            />
-          </div>
-
-          <div className="flex gap-1 pb-3">
-            <input
-              type="number"
-              placeholder="Price"
-              className="input input-bordered w-full max-w-xs"
-              name="price"
-              required
-            />
-            <input
-              type="number"
-              placeholder="Quantity"
-              className="input input-bordered w-full max-w-xs"
-              name="quantity"
-              required
-            />
-          </div>
-
+    <div className="max-w-7xl mx-auto w-full h-[90vh]">
+      <div className="flex items-center justify-center">
+        <div className="bg-gray-400 rounded-md mt-14 p-6">
           <div className="flex items-center justify-center">
-            <button
-              type="submit"
-              className="btn-primary btn-sm w-full bg-green-400 rounded-md text-white font-semibol uppercase"
-            >
-              Add Product
-            </button>
+            <h1 className="text-3xl font-semibold pb-8">Add New Product</h1>
           </div>
-        </form>
+          <form onSubmit={handleAddProduct}>
+            <div className="flex gap-2 pb-3">
+              <input
+                type="text"
+                placeholder="Product Name"
+                className="input input-bordered w-full max-w-xs"
+                name="name"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Product Title"
+                className="input input-bordered w-full max-w-xs"
+                name="title"
+              />
+            </div>
+
+            <div className="flex gap-2 pb-3">
+              <input
+                type="img"
+                placeholder="Img URL"
+                className="input input-bordered w-full max-w-xs"
+                name="image"
+              />
+              <input
+                type="text"
+                placeholder="Category"
+                className="input input-bordered w-full max-w-xs"
+                name="category"
+                required
+              />
+            </div>
+
+            <div className="flex gap-2 pb-3">
+              <input
+                type="number"
+                placeholder="Price"
+                className="input input-bordered w-full max-w-xs"
+                name="price"
+                required
+              />
+              <input
+                type="number"
+                placeholder="Quantity"
+                className="input input-bordered w-full max-w-xs"
+                name="quantity"
+                required
+              />
+            </div>
+
+            <div className="flex items-center justify-center">
+              <button
+                type="submit"
+                className="btn-primary btn-sm w-full bg-green-400 rounded-md text-white font-semibol uppercase"
+              >
+                Add Product
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

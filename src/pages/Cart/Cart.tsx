@@ -21,13 +21,14 @@ const Cart = () => {
   const currentUserCart = cartData?.filter(
     (cart: any) => cart.userId == user?._id
   );
+  console.log(currentUserCart);
 
   const handleCartDelete = async (id: any) => {
     // console.log(id);
     await deleteCart(id);
   };
   return (
-    <div className="max-w-7xl mx-auto w-full">
+    <div className="max-w-7xl mx-auto w-full min-h-screen">
       <div>
         <Link to={'/payment'}>payment</Link>
       </div>
@@ -42,18 +43,18 @@ const Cart = () => {
               <div key={cartData?._id}>
                 <div className=" bg-base-100 shadow-xl  h-full">
                   <figure>
-                    <img src={cartData?.productId.image} alt="" />
+                    <img src={cartData?.productId?.image} alt="" />
                   </figure>
                   <div className="flex items-center pb-3 ">
                     <div className="px-3">
                       <h2 className="text-xl font-semibold ">
-                        {cartData?.productId.name}
+                        {cartData?.productId?.name}
                       </h2>
-                      <p>{cartData?.productId.title}</p>
+                      <p>{cartData?.productId?.title}</p>
                       <p>
                         Price:{" "}
                         <span className="font-bold text-lg text-[#f76b00]">
-                          {cartData?.productId.price}
+                          {cartData?.productId?.price}
                         </span>
                       </p>
                     </div>

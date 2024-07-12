@@ -7,6 +7,7 @@ import {
   useUpdateProductMutation,
 } from "../../redux/features/products/products";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Product = () => {
   const [productId, setProductId] = useState("");
@@ -17,7 +18,24 @@ const Product = () => {
   const [updateProduct, {}] = useUpdateProductMutation();
 
   const handleProductDelete = async (id: string) => {
-    await deleteProduct(id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+        deleteProduct(id);
+      }
+    });
   };
 
   const handleUpdatePrductId = (id: any) => {
