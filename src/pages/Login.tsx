@@ -19,13 +19,16 @@ const Login = () => {
 
     console.log("Received values of form: ", values.user);
     console.log("Received res of form: ", res.data);
-    const { _id, email } = res.data;
-    const finalResData = { _id, email };
+    const { _id, email, name } = res.data;
+    const finalResData = { _id, email, name };
     dispatch(setUser({ user: finalResData }));
   };
   return (
-    <div>
-      <Form
+    <div className="bg-gray-200 h-screen">
+      <div className="max-w-7xl mx-auto w-full">
+   <div className="mx-auto flex justify-center items-center h-[80vh]">
+  <div className="p-10 rounded-md bg-gray-300">
+  <Form
         name="normal_login"
         className="login-form"
         initialValues={{ remember: true }}
@@ -52,11 +55,6 @@ const Login = () => {
             defaultValue={"admin01"}
           />
         </Form.Item>
-        <Form.Item>
-          <a className="login-form-forgot" href="">
-            Forgot password
-          </a>
-        </Form.Item>
 
         <Form.Item>
           <Button
@@ -66,9 +64,12 @@ const Login = () => {
           >
             Log in
           </Button>
-          Or <a href="">register now!</a>
+           Or <a href="/register">register now!</a>
         </Form.Item>
       </Form>
+  </div>
+   </div>
+    </div>
     </div>
   );
 };
