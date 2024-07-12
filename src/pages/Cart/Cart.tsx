@@ -1,5 +1,6 @@
 /* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { Link } from "react-router-dom";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import {
   useDeleteCartMutation,
@@ -20,7 +21,6 @@ const Cart = () => {
   const currentUserCart = cartData?.filter(
     (cart: any) => cart.userId == user?._id
   );
-  // console.log('current user cart', currentUserCart);
 
   const handleCartDelete = async (id: any) => {
     // console.log(id);
@@ -28,6 +28,9 @@ const Cart = () => {
   };
   return (
     <div className="max-w-7xl mx-auto w-full">
+      <div>
+        <Link to={'/payment'}>payment</Link>
+      </div>
       <div className="py-16 mb-10">
         <h2 className="md:text-4xl text-xl pb-10 text-center font-bold">
           Just For You
