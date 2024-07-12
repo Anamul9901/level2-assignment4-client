@@ -1,7 +1,15 @@
 import { Link, NavLink } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { logout, selectCurrentUser } from "../../redux/features/auth/authSlice";
 
 const Navber = () => {
-  const user = true;
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectCurrentUser);
+  console.log(user);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
   const navitem = (
     <>
       <li>
@@ -16,6 +24,20 @@ const Navber = () => {
           }
         >
           Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/products"
+          className={({ isActive, isPending }) =>
+            isPending
+              ? "pending"
+              : isActive
+              ? "text-[#050506] underline font-black md:text-xl "
+              : "lg:text-white text-[#f76b00] font-bold md:text-xl"
+          }
+        >
+          Products
         </NavLink>
       </li>
     </>
@@ -64,6 +86,9 @@ const Navber = () => {
             <ul className="menu menu-horizontal px-1">{navitem}</ul>
           </div>
           <div className="navbar-end">
+          <div className="pr-4">
+            <Link to='/cart'>Cart</Link>
+          </div>
             {user ? (
               <div className="flex items-center">
                 <div className="flex flex-row-reverse items-center">
@@ -73,17 +98,20 @@ const Navber = () => {
                       className="btn btn-ghost btn-circle avatar"
                     >
                       <div className="w-10 rounded-full">
-                        <h1>image</h1>
+                        <img
+                          src="https://i.ibb.co/bd741Kc/pngwing-com-46.png"
+                          alt=""
+                        />
                       </div>
                     </label>
                   </div>
                   <div className="">
                     <span className="text-xs md:text-lg font-bold">
-                     <h1>user name</h1>
+                      <h1>{user ? user?.name : "No Name"}</h1>
                     </span>
                   </div>
                 </div>
-                <button  className=" ">
+                <button onClick={handleLogout} className=" ">
                   <h1>logout</h1>
                 </button>
               </div>

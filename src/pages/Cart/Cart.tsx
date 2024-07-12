@@ -1,18 +1,29 @@
+/* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import {
   useDeleteCartMutation,
   useGetAllCartQuery,
 } from "../../redux/features/carts/carts";
+import { useAppSelector } from "../../redux/hooks";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const Cart = () => {
   const { data } = useGetAllCartQuery(undefined);
   const [deleteCart, {}] = useDeleteCartMutation();
   const cartData = data?.data;
-  console.log(cartData);
+  // console.log(cartData);
 
-  const handleCartDelete = async(id: any) => {
-    console.log(id);
+  const user = useAppSelector(selectCurrentUser);
+  // console.log(user?._id);
+
+  const currentUserCart = cartData?.filter(
+    (cart: any) => cart.userId == user?._id
+  );
+  // console.log('current user cart', currentUserCart);
+
+  const handleCartDelete = async (id: any) => {
+    // console.log(id);
     await deleteCart(id);
   };
   return (
@@ -24,7 +35,7 @@ const Cart = () => {
         </h2>
         <div className=" ">
           <div className="grid  grid-cols-2 px-1 md:px-0 md:grid-cols-4 lg:grid-cols-5 gap-3  ">
-            {cartData?.map((cartData: any) => (
+            {currentUserCart?.map((cartData: any) => (
               <div key={cartData?._id}>
                 <div className=" bg-base-100 shadow-xl  h-full">
                   <figure>

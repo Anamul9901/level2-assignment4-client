@@ -5,13 +5,15 @@ import Cart from "../pages/Cart/Cart";
 import AddProduct from "../components/AddProduct/AddProduct";
 import SingleProduct from "../pages/SingleProduct/SingleProduct";
 import Register from "../pages/Register";
+import App from "../App";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <App />,
     children: [
       {
-        index: true,
+        path: "/",
         element: <HomePage />,
       },
       {

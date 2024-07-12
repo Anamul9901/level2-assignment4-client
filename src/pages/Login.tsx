@@ -4,8 +4,10 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../redux/hooks";
 import { useLoginMutation } from "../redux/features/auth/authApi";
 import {  setUser } from "../redux/features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [login, { error }] = useLoginMutation();
   console.log("error=>", error);
@@ -22,6 +24,8 @@ const Login = () => {
     const { _id, email, name } = res.data;
     const finalResData = { _id, email, name };
     dispatch(setUser({ user: finalResData }));
+    navigate('/')
+    
   };
   return (
     <div className="bg-gray-200 h-screen">
