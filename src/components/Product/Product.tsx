@@ -6,7 +6,7 @@ import {
   useGetAllProductQuery,
   useUpdateProductMutation,
 } from "../../redux/features/products/products";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Product = () => {
   const [productId, setProductId] = useState("");
@@ -67,24 +67,25 @@ const Product = () => {
         <div className="grid  grid-cols-2 px-1 md:px-0 md:grid-cols-4 lg:grid-cols-5 gap-3  ">
           {products?.map((product: any) => (
             <div key={product?._id}>
-              <Link to={`/product/${product?._id}`}>
               <div className=" bg-base-100 shadow-xl  h-full">
-                <figure>
-                  <img src={product.image} alt="" />
-                </figure>
-                <div className="flex items-center pb-3 ">
-                  <div className="px-3">
-                    <h2 className="text-xl font-semibold ">{product.name}</h2>
-                    <p>{product.title}</p>
-                    <p>
-                      Price:{" "}
-                      <span className="font-bold text-lg text-[#f76b00]">
-                        {product.price}
-                      </span>
-                    </p>
+                <Link to={`/product/${product?._id}`}>
+                  <figure>
+                    <img src={product.image} alt="" />
+                  </figure>
+                  <div className="flex items-center pb-3 ">
+                    <div className="px-3">
+                      <h2 className="text-xl font-semibold ">{product.name}</h2>
+                      <p>{product.title}</p>
+                      <p>
+                        Price:{" "}
+                        <span className="font-bold text-lg text-[#f76b00]">
+                          {product.price}
+                        </span>
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex justify-center gap-3">
+                </Link>
+                <div className="flex justify-center gap-3 pb-2">
                   <button
                     onClick={() => handleProductDelete(product?._id)}
                     className="btn-primary btn-sm bg-red-400 rounded-md text-white font-semibold"
@@ -155,12 +156,14 @@ const Product = () => {
                             placeholder="Price"
                             className="input input-bordered w-full max-w-xs"
                             name="price"
+                            required
                           />
                           <input
                             type="number"
                             placeholder="Quantity"
                             className="input input-bordered w-full max-w-xs"
                             name="quantity"
+                            required
                           />
                         </div>
 
@@ -176,7 +179,7 @@ const Product = () => {
                     </div>
                   </dialog>
                 </div>
-              </div></Link>
+              </div>
             </div>
           ))}
         </div>
