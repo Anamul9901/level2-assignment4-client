@@ -6,6 +6,7 @@ import AddProduct from "../components/AddProduct/AddProduct";
 import SingleProduct from "../pages/SingleProduct/SingleProduct";
 import Register from "../pages/Register";
 import App from "../App";
+import Payment from "../pages/Payment/Payment";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/product/:id",
         element: <SingleProduct />,
+      },
+      {
+        path: "/payment",
+        element: <Payment />,
       },
     ],
   },
