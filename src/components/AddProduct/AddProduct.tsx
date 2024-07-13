@@ -10,7 +10,7 @@ const AddProduct = () => {
   const navigation= useNavigate()
   const user = useAppSelector(selectCurrentUser);
   const userId = user?._id;
-  console.log("current-user", userId);
+  // console.log("current-user", userId);
  
 
   const [createProduct, {}] = useCreateProductMutation();
@@ -48,12 +48,12 @@ const AddProduct = () => {
       quantity,
       user: userId,
     };
-    console.log(productData);
+    // console.log(productData);
     // if (!user) {
     //   alert("user not found! Login first");
     // } else {
     const res = await createProduct(productData);
-    console.log("add product--->", res);
+    // console.log("add product--->", res);
     if(res?.data?.success === true){
       Swal.fire({
         position: "top-end",

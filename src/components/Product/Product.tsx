@@ -27,12 +27,12 @@ const Product = () => {
   if (data?.data?.productsLength) {
     productLength = data?.data?.productsLength;
   }
-  console.log("products", productLength);
+  // console.log("products", productLength);
 
   const numberOfPages = Math.ceil(productLength / limit);
-  console.log("number of page", numberOfPages);
+  // console.log("number of page", numberOfPages);
   const pages = [...Array(numberOfPages).keys()]; // for lup er shortcut
-  console.log(pages);
+  // console.log(pages);
 
   const [deleteProduct, {}] = useDeleteProductMutation();
   const [updateProduct, {}] = useUpdateProductMutation();
@@ -40,7 +40,7 @@ const Product = () => {
   const handleSearch = (e: any) => {
     e.preventDefault();
     const searchText = e.target.search.value;
-    console.log(searchText);
+    // console.log(searchText);
     // refetch();
     setSearchTerm(searchText);
   };
@@ -92,7 +92,7 @@ const Product = () => {
       },
     };
     const res = await updateProduct(options);
-    console.log("updted res data =>", res);
+    // console.log("updted res data =>", res);
     form.reset();
     if (res?.data?.success === true) {
       navigate("/");
@@ -120,13 +120,13 @@ const Product = () => {
 
   const handleItemsPerPage = (e: any) => {
     const val = parseInt(e.target.value);
-    console.log(val);
+    // console.log(val);
     setLimit(val);
     setPage(1)
   };
 
   const setCurrentPage = (page: number) => {
-    console.log("current page", page);
+    // console.log("current page", page);
     setPage(page + 1);
   };
 

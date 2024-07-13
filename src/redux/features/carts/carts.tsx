@@ -25,7 +25,7 @@ const cartsApi = baseApi.injectEndpoints({
 
     deleteCart: builder.mutation({
       query: (id) => {
-        console.log('deleted cart id', id);
+        // console.log('deleted cart id', id);
         return {
           url: `/carts/${id}`,
           method: "DELETE",

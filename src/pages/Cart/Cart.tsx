@@ -26,13 +26,13 @@ const Cart = () => {
   const currentUserCart = cartData?.filter(
     (cart: any) => cart.userId == user?._id
   );
-  console.log(currentUserCart);
+  // console.log(currentUserCart);
 
   let totalPrice = 0;
   for (let i = 0; i < currentUserCart?.length; i++) {
     totalPrice += currentUserCart[i]?.productId?.price;
   }
-  console.log(totalPrice);
+  // console.log(totalPrice);
 
   const handleCartDelete = async (id: any) => {
     Swal.fire({

@@ -4,7 +4,7 @@ const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProduct: builder.query({
       query: (searchData) => {
-        console.log('search data--->', searchData);
+        // console.log('search data--->', searchData);
         return {
           url: `/products?searchTerm=${searchData?.searchTerm}&limit=${searchData?.limit}&page=${searchData?.page}`,
           method: "GET",
@@ -24,7 +24,7 @@ const productsApi = baseApi.injectEndpoints({
 
     createProduct: builder.mutation({
       query: (productData) => {
-        console.log("products--->", productData);
+        // console.log("products--->", productData);
         return {
           url: "/products",
           method: "POST",
@@ -47,7 +47,7 @@ const productsApi = baseApi.injectEndpoints({
 
     updateProduct: builder.mutation({
       query: (options) => {
-        console.log("update-----", options.data);
+        // console.log("update-----", options.data);
         return {
           url: `/products/${options?.id}`,
           method: "PUT",

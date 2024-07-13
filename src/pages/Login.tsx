@@ -1,3 +1,4 @@
+/* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
@@ -10,8 +11,8 @@ import Swal from "sweetalert2";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [login, { error }] = useLoginMutation();
-  console.log("error=>", error);
+  const [login, {}] = useLoginMutation();
+  // console.log("error=>", error);
 
   const onFinish = async (values: any) => {
     const userInfo = {
@@ -20,8 +21,8 @@ const Login = () => {
     };
     const res = await login(userInfo).unwrap();
 
-    console.log("Received values of form: ", values.user);
-    console.log("Received res of form: ", res.data);
+    // console.log("Received values of form: ", values.user);
+    // console.log("Received res of form: ", res.data);
     const { _id, email, name } = res.data;
     const finalResData = { _id, email, name };
     dispatch(setUser({ user: finalResData }));

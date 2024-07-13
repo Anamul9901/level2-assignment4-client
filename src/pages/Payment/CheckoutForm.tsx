@@ -111,7 +111,7 @@ const CheckoutForm = () => {
       // console.log("Pyment intent", paymentIntent);
       setTransctionId("");
       if (paymentIntent?.status === "succeeded") {
-        console.log("transaction id", paymentIntent.id);
+        // console.log("transaction id", paymentIntent.id);
         setTransctionId(paymentIntent?.id);
 
         //now save the payment in the database
@@ -124,7 +124,7 @@ const CheckoutForm = () => {
         };
 
         const res = await createUserPayData(payment);
-        console.log("user save data", res);
+        // console.log("user save data", res);
       }
     }
   };

@@ -1,3 +1,4 @@
+/* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
@@ -10,18 +11,18 @@ import Swal from "sweetalert2";
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [register, { error }] = useRegisterMutation();
-  console.log(error);
+  const [register, {}] = useRegisterMutation();
+  // console.log(error);
   const onFinish = async (values: any) => {
     const userInfo = {
       name: values.name,
       email: values.email,
       password: values.password,
     };
-    console.log(userInfo);
+    // console.log(userInfo);
 
     const res = await register(userInfo).unwrap();
-    console.log("success", res);
+    // console.log("success", res);
 
     const { _id, email, name } = res.data;
     const finalResData = { _id, email, name };
@@ -31,7 +32,7 @@ const Register = () => {
       icon: "success",
       title: "Register Successfully",
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
     });
     navigate("/");
   };
@@ -86,15 +87,20 @@ const Register = () => {
               </Form.Item>
 
               <Form.Item>
-                <div  className="flex items-center gap-3">
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  className="login-form-button bg-green-500 font-semibold"
-                >
-                  Sign Up
-                </Button>
-                <p>Or <a href="/login"  className="text-blue-600">Login now!</a></p>
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button bg-green-500 font-semibold"
+                  >
+                    Sign Up
+                  </Button>
+                  <p>
+                    Or{" "}
+                    <a href="/login" className="text-blue-600">
+                      Login now!
+                    </a>
+                  </p>
                 </div>
               </Form.Item>
             </Form>

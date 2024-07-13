@@ -7,7 +7,7 @@ import { FiLogOut } from "react-icons/fi";
 const Navber = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
-  console.log(user);
+  // console.log(user);
 
   const handleLogout = () => {
     dispatch(logout());

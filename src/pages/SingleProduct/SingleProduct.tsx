@@ -11,7 +11,7 @@ const SingleProduct = () => {
   const navigation = useNavigate();
   // console.log(id);
   const user = useAppSelector(selectCurrentUser);
-  console.log(user?._id);
+  // console.log(user?._id);
 
   const { data } = useGetSingleProductQuery(id);
   const cartData = data?.data;
@@ -33,7 +33,7 @@ const SingleProduct = () => {
         }
       });
     }
-    console.log(id);
+    // console.log(id);
     const data = { productId: id, userId: user?._id };
     const res = await addCart(data);
     if (res?.data?.success === true) {
@@ -45,7 +45,7 @@ const SingleProduct = () => {
         timer: 1500,
       });
     }
-    console.log("success add cart", res);
+    // console.log("success add cart", res);
   };
   return (
     <div className="max-w-7xl mx-auto w-full py-10 ">
