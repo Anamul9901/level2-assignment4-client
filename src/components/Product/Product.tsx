@@ -16,11 +16,10 @@ const Product = () => {
   const navigate = useNavigate();
   const [productId, setProductId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [sort, setSort] = useState("");
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
 
-  const searchData = { searchTerm, sort, limit, page };
+  const searchData = { searchTerm, limit, page };
   const { data } = useGetAllProductQuery(searchData);
   const products = data?.data?.fieldQuery;
 
@@ -123,7 +122,7 @@ const Product = () => {
     const val = parseInt(e.target.value);
     console.log(val);
     setLimit(val);
-    // setCurrentPage(1);
+    setPage(1)
   };
 
   const setCurrentPage = (page: number) => {
