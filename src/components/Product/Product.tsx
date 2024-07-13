@@ -10,6 +10,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { IoSearchSharp } from "react-icons/io5";
+import "./Product.css";
 
 const Product = () => {
   const navigate = useNavigate();
@@ -282,28 +283,49 @@ const Product = () => {
           ))}
         </div>
         {/* pagination button */}
-        <div className="pagination">
-          <p>Current Page: {page}</p>
+        <div className="flex justify-center items-center pt-10">
+          <div className="paginatio">
+            <p className="text-center ">Current Page: {page}</p>
 
-          <button onClick={handlePrevPage}>Prev</button>
-          {pages.map((page) => (
             <button
-              className={page === page ? "selected" : undefined}
-              onClick={() => setCurrentPage(page)}
-              key={page}
+              onClick={handlePrevPage}
+              className="btn btn-sm bg-green-300"
             >
-              {page + 1}
+              Prev
             </button>
-          ))}
-          <button onClick={handleNextPage}>Next</button>
+            {pages.map((page) => (
+              <button
+                // ${page === page ? "selected" : 'btn'}
+                className={`btn btn-sm ${
+                  page == page ? "bg-green-400" : undefined
+                }`}
+                onClick={() => setCurrentPage(page)}
+                key={page}
+              >
+                {page + 1}
+              </button>
+            ))}
+            <button
+              className="btn btn-sm bg-green-300"
+              onClick={handleNextPage}
+            >
+              Next
+            </button>
 
-          {/* value={itemsPerPage} onChange={handleItemsPerPage} */}
-          <select value={limit} onChange={handleItemsPerPage} name="" id="">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-          </select>
+            {/* value={itemsPerPage} onChange={handleItemsPerPage} */}
+            <select
+              className="btn btn-sm bg-green-300"
+              value={limit}
+              onChange={handleItemsPerPage}
+              name=""
+              id=""
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
