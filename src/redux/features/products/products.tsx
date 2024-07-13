@@ -6,7 +6,7 @@ const productsApi = baseApi.injectEndpoints({
       query: (searchData) => {
         console.log('search data--->', searchData);
         return {
-          url: `/products?searchTerm=${searchData?.searchTerm}`,
+          url: `/products?searchTerm=${searchData?.searchTerm}&limit=${searchData?.limit}&page=${searchData?.page}`,
           method: "GET",
         };
       },

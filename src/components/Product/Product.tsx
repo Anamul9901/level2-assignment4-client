@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
@@ -13,25 +14,36 @@ import { IoSearchSharp } from "react-icons/io5";
 const Product = () => {
   const navigate = useNavigate();
   const [productId, setProductId] = useState("");
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sort, setSort] = useState('');
-  const [limit, setLimit] = useState('');
-  const [page, setPage] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sort, setSort] = useState("");
+  const [limit, setLimit] = useState(5);
+  const [page, setPage] = useState(1);
 
-  const searchData= {searchTerm, sort, limit, page}
+  const searchData = { searchTerm, sort, limit, page };
   const { data } = useGetAllProductQuery(searchData);
-  const products = data?.data;
+  const products = data?.data?.fieldQuery;
+
+  let productLength = 10;
+  if (data?.data?.productsLength) {
+    productLength = data?.data?.productsLength;
+  }
+  console.log("products", productLength);
+
+  const numberOfPages = Math.ceil(productLength / limit);
+  console.log("number of page", numberOfPages);
+  const pages = [...Array(numberOfPages).keys()]; // for lup er shortcut
+  console.log(pages);
 
   const [deleteProduct, {}] = useDeleteProductMutation();
   const [updateProduct, {}] = useUpdateProductMutation();
 
-  const handleSearch = (e: any)=>{
+  const handleSearch = (e: any) => {
     e.preventDefault();
     const searchText = e.target.search.value;
     console.log(searchText);
     // refetch();
     setSearchTerm(searchText);
-  }
+  };
 
   const handleProductDelete = async (id: string) => {
     Swal.fire({
@@ -94,6 +106,30 @@ const Product = () => {
     }
   };
 
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (page < numberOfPages) {
+      setPage(page + 1);
+    }
+  };
+
+  const handleItemsPerPage = (e: any) => {
+    const val = parseInt(e.target.value);
+    console.log(val);
+    setLimit(val);
+    // setCurrentPage(1);
+  };
+
+  const setCurrentPage = (page: number) => {
+    console.log("current page", page);
+    setPage(page + 1);
+  };
+
   return (
     <div className="py-16 mb-10">
       <div className="flex justify-end items-center gap-3">
@@ -106,17 +142,20 @@ const Product = () => {
           </Link>
         </div>
         <form onSubmit={handleSearch}>
-        <div className="flex items-center">
-          <input
-            type="text"
-            name="search"
-            placeholder="Type here"
-            className="input border border-green-300 rounded-r-none w-full max-w-xs"
-          />
-          <button type="submit" className="btn border-green-300 rounded-l-none">
-            <IoSearchSharp />
-          </button>
-        </div>
+          <div className="flex items-center">
+            <input
+              type="text"
+              name="search"
+              placeholder="Type here"
+              className="input border border-green-300 rounded-r-none w-full max-w-xs"
+            />
+            <button
+              type="submit"
+              className="btn border-green-300 rounded-l-none"
+            >
+              <IoSearchSharp />
+            </button>
+          </div>
         </form>
       </div>
       <h2 className="md:text-4xl text-xl pb-10 text-center font-bold">
@@ -241,6 +280,30 @@ const Product = () => {
               </div>
             </div>
           ))}
+        </div>
+        {/* pagination button */}
+        <div className="pagination">
+          <p>Current Page: {page}</p>
+
+          <button onClick={handlePrevPage}>Prev</button>
+          {pages.map((page) => (
+            <button
+              className={page === page ? "selected" : undefined}
+              onClick={() => setCurrentPage(page)}
+              key={page}
+            >
+              {page + 1}
+            </button>
+          ))}
+          <button onClick={handleNextPage}>Next</button>
+
+          {/* value={itemsPerPage} onChange={handleItemsPerPage} */}
+          <select value={limit} onChange={handleItemsPerPage} name="" id="">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
         </div>
       </div>
     </div>
