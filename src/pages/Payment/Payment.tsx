@@ -7,7 +7,7 @@ const Payment = () => {
   // console.log(stripePromise);
   return (
     <div className="h-[90vh] max-w-7xl mx-auto w-full">
-      <div className="flex justify-center py-20">
+      <div className="flex justify-center">
         <div className="w-[450px]">
         <Elements stripe={stripePromise}>
           <CheckoutForm />

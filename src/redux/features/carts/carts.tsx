@@ -6,7 +6,7 @@ const cartsApi = baseApi.injectEndpoints({
       query: () => {
         return {
           url: "/carts",
-          method: "GET",
+          method: "GET"
         };
       },
       providesTags: ["product"],

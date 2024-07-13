@@ -6,10 +6,11 @@ import {
   useGetAllProductQuery,
   useUpdateProductMutation,
 } from "../../redux/features/products/products";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const Product = () => {
+  const navigate = useNavigate()
   const [productId, setProductId] = useState("");
   const { data } = useGetAllProductQuery(undefined);
   const products = data?.data;
@@ -65,6 +66,17 @@ const Product = () => {
     };
     const res = await updateProduct(options);
     console.log("updted res data =>", res);
+    form.reset();
+    if(res?.data?.success === true){
+      navigate('/')
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Updated Successfully",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
   };
 
   return (

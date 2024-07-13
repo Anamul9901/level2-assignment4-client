@@ -1,6 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logout, selectCurrentUser } from "../../redux/features/auth/authSlice";
+import { BsCartCheck } from "react-icons/bs";
+import { FiLogOut } from "react-icons/fi";
 
 const Navber = () => {
   const dispatch = useAppDispatch();
@@ -20,7 +22,7 @@ const Navber = () => {
               ? "pending"
               : isActive
               ? "text-[#050506] underline font-black md:text-xl "
-              : "lg:text-white text-[#f76b00] font-bold md:text-xl"
+              : "lg:text-white text-[#09962f] font-bold md:text-xl"
           }
         >
           Home
@@ -28,22 +30,22 @@ const Navber = () => {
       </li>
       <li>
         <NavLink
-          to="/products"
+          to="/add-product"
           className={({ isActive, isPending }) =>
             isPending
               ? "pending"
               : isActive
               ? "text-[#050506] underline font-black md:text-xl "
-              : "lg:text-white text-[#f76b00] font-bold md:text-xl"
+              : "lg:text-white text-[#09962f] font-bold md:text-xl"
           }
         >
-          Products
+          Add-Product
         </NavLink>
       </li>
     </>
   );
   return (
-    <div className="bg-[#f76b00] text-white">
+    <div className="bg-[#027b32] text-white">
       <div className="max-w-7xl mx-auto w-full">
         <div className="navbar   ">
           <div className="navbar-start ">
@@ -72,13 +74,13 @@ const Navber = () => {
               </ul>
             </div>
             <Link to="/">
-              <div className="flex items-center">
+              <div className="flex items-center gap-1">
                 <img
                   className="md:w-10%] w-[10%]"
-                  src={"https://i.ibb.co/LZsK9YV/pngwing-com-15.png"}
+                  src={"https://i.ibb.co/Mf5C5N2/pngwing-com-1.png"}
                   alt=""
                 />
-                <h2 className="font-bold md:text-xl">e-SHOP</h2>
+                <h2 className="font-bold md:text-xl">Tree Oasis</h2>
               </div>
             </Link>
           </div>
@@ -87,7 +89,7 @@ const Navber = () => {
           </div>
           <div className="navbar-end">
           <div className="pr-4">
-            <Link to='/cart'>Cart</Link>
+            <Link className="text-2xl hover:text-3xl" to='/cart'><BsCartCheck /></Link>
           </div>
             {user ? (
               <div className="flex items-center">
@@ -112,11 +114,11 @@ const Navber = () => {
                   </div>
                 </div>
                 <button onClick={handleLogout} className=" ">
-                  <h1>logout</h1>
+                  <h1 className="text-2xl hover:text-3xl"><FiLogOut /></h1>
                 </button>
               </div>
             ) : (
-              <Link to="/login">
+              <Link  to="/login">
                 <button className="btn btn-sm bg-white hover:text-[#080403] text-black font-bold">
                   Log In
                 </button>

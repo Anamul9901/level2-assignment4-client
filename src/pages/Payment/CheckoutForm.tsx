@@ -9,6 +9,7 @@ import {
 import { useGetAllCartQuery } from "../../redux/features/carts/carts";
 import { useAppSelector } from "../../redux/hooks";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
+import Swal from "sweetalert2";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const CheckoutForm = () => {
@@ -19,6 +20,8 @@ const CheckoutForm = () => {
   const elements = useElements();
 
   const { data } = useGetAllCartQuery(undefined);
+  
+
   const cartData = data?.data;
   // console.log(cartData);
   const user = useAppSelector(selectCurrentUser);
@@ -69,7 +72,7 @@ const CheckoutForm = () => {
       return;
     }
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    const { error } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
@@ -82,6 +85,13 @@ const CheckoutForm = () => {
       // console.log("payment method", paymentMethod);
       setError("");
       setTransctionId("");
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Your Payment is Success",
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
     // confirm payment
     const { paymentIntent, error: confirmError } =
@@ -120,10 +130,11 @@ const CheckoutForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <p>Total Amount: {totalPrice}</p>
+    <div className="border mt-10 pb-10 md:px-4 px-1 rounded-md bg-slate-100">
+      <div className="flex justify-center">
+        <p className="text-2xl font-bold text-green-500 pt-10 pb-10">Total Amount: {totalPrice}</p>
       </div>
+      <form onSubmit={handleSubmit}>
       <CardElement
         options={{
           style: {
@@ -140,18 +151,21 @@ const CheckoutForm = () => {
           },
         }}
       />
-      <button
-        className="btn btn-sm btn-primary"
+     <div className="flex justify-center pt-10">
+     <button
+        className="btn btn-sm bg-green-500 text-white"
         type="submit"
         disabled={!stripe || !clientSecret}
       >
         Pay
       </button>
+     </div>
       <p className="text-red-600">{error}</p>
       {transctionId && (
         <p className="text-green-600">Transaction ID: {transctionId}</p>
       )}
     </form>
+    </div>
   );
 };
 

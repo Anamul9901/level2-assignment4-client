@@ -2,13 +2,14 @@ import { baseApi } from "../../api/baseApi";
 
 const paymentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllPayment: builder.mutation({
+    getAllPayment: builder.query({
       query: () => {
         return {
           url: "/payment",
           method: "GET",
         };
       },
+      providesTags: ["product"],
     }),
     createPayment: builder.mutation({
       query: (data) => {
@@ -17,8 +18,10 @@ const paymentApi = baseApi.injectEndpoints({
           url: "/payment/create-payment-intent",
           method: "POST",
           body: data,
+          credentials: "include",
         };
       },
+      invalidatesTags: ["product"],
     }),
 
     createUserPayData: builder.mutation({
@@ -30,9 +33,13 @@ const paymentApi = baseApi.injectEndpoints({
           body: data,
         };
       },
+      invalidatesTags: ["product"],
     }),
   }),
 });
 
-export const { useCreatePaymentMutation, useCreateUserPayDataMutation } =
-  paymentApi;
+export const {
+  useGetAllPaymentQuery,
+  useCreatePaymentMutation,
+  useCreateUserPayDataMutation,
+} = paymentApi;

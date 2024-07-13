@@ -1,17 +1,36 @@
 /* eslint-disable no-empty-pattern */
+import Swal from "sweetalert2";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import { useCreateProductMutation } from "../../redux/features/products/products";
 import { useAppSelector } from "../../redux/hooks";
+import { useNavigate } from "react-router-dom";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const AddProduct = () => {
+  const navigation= useNavigate()
   const user = useAppSelector(selectCurrentUser);
   const userId = user?._id;
   console.log("current-user", userId);
+ 
 
   const [createProduct, {}] = useCreateProductMutation();
   const handleAddProduct = async (e: any) => {
     e.preventDefault();
+    if (!user) {
+      Swal.fire({
+        title: "You are not Login?",
+        text: "Login first. Redirect Login page",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ok!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigation('/login')
+        }
+      });
+    }
     const form = e.target;
     const name = form.name.value;
     const title = form.title.value;
@@ -35,6 +54,16 @@ const AddProduct = () => {
     // } else {
     const res = await createProduct(productData);
     console.log("add product--->", res);
+    if(res?.data?.success === true){
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Your work has been saved",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      navigation('/')
+    }
     // }
   };
   return (
@@ -97,7 +126,7 @@ const AddProduct = () => {
             <div className="flex items-center justify-center">
               <button
                 type="submit"
-                className="btn-primary btn-sm w-full bg-green-400 rounded-md text-white font-semibol uppercase"
+                className="btn-primary btn-sm font-bold w-full hover:bg-blue-500 bg-green-400 rounded-md text-white font-semibol uppercase"
               >
                 Add Product
               </button>

@@ -1,98 +1,57 @@
-import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
     <div className="">
-      <footer className="w-full bg-gray-800 p-8 ">
-        <div className="max-w-[1300px]  mx-auto">
-          <div>
-            <div className="flex flex-row flex-wrap items-center justify-center gap-y-6 gap-x-12    text-center md:justify-between text-white">
-              <div>
-                <Link to="/">
-                  <div className="flex items-center justify-center">
-                    <img
-                      className="md:w-[15%] w-[10%]"
-                      src={"https://i.ibb.co/LZsK9YV/pngwing-com-15.png"}
-                      alt=""
-                    />
-                    <h2 className="font-bold md:text-xl text-[#f76b00]">
-                      e-SHOP
-                    </h2>
-                  </div>
-                </Link>
-              </div>
-
-              <ul className="flex flex-wrap items-center gap-y-2 gap-x-8">
-                <div className="">
-                  <a>
-                    <img
-                      src={"https://i.ibb.co/161dhbQ/Anamul.jpg"}
-                      alt="logo-ct"
-                      className="w-10 rounded-3xl ml-8"
-                    />
-                    <p>Anamul Haque</p>
-                    <div className="flex">
-                      <p className="ml-5 pt-2">
-                        <a
-                          className="hover:text-pink-500 text-2xl text-blue-500"
-                          href="https://www.facebook.com/Anamul114"
-                          target="_blan"
-                        >
-                          facebook
-                        </a>
-                      </p>
-                      <p className="ml-5 pt-2">
-                        <a
-                          className="hover:text-pink-500 text-2xl text-green-500"
-                          href="https://wa.me/+8801864668089"
-                          target="_blan"
-                        >
-                          whatsapp
-                        </a>
-                      </p>
-                    </div>
-                  </a>
-                </div>
-
-                <div>
-                  <li>
-                    <a
-                      href="https://www.facebook.com/Anamul114"
-                      target="_blan"
-                      className="block font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased transition-colors hover:text-pink-500 focus:text-pink-500"
-                    >
-                      About Us
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href=""
-                      className="block font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased transition-colors hover:text-pink-500 focus:text-pink-500"
-                    >
-                      License
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://www.facebook.com/Anamul114"
-                      target="_blan"
-                      className="block font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased transition-colors hover:text-pink-500 focus:text-pink-500"
-                    >
-                      Contact Us
-                    </a>
-                  </li>
-                </div>
-              </ul>
-            </div>
-            <hr className="my-8 border-blue-gray-50" />
-            <p className="block text-center   text-slate-400 pb-4">
-              Thank for visiting
-              <p>
-                <small>&copy; 2023 Your e-SHOP. All rights reserved.</small>
-              </p>
-            </p>
+      <footer className="footer footer-center bg-green-100 text-base-content rounded p-10">
+        <nav className="grid grid-flow-col gap-4">
+          <a className="link link-hover">About us</a>
+          <a className="link link-hover">Contact</a>
+          <a className="link link-hover">Jobs</a>
+          <a className="link link-hover">Press kit</a>
+        </nav>
+        <nav>
+          <div className="grid grid-flow-col gap-4">
+            <a>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                className="fill-current"
+              >
+                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+              </svg>
+            </a>
+            <a>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                className="fill-current"
+              >
+                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
+              </svg>
+            </a>
+            <a>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                className="fill-current"
+              >
+                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
+              </svg>
+            </a>
           </div>
-        </div>
+        </nav>
+        <aside>
+          <p>
+            Copyright © ${new Date().getFullYear()} - All right reserved by ACME
+            Industries Ltd
+          </p>
+        </aside>
       </footer>
     </div>
   );
