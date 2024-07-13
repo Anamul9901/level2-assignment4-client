@@ -3,9 +3,10 @@ import { baseApi } from "../../api/baseApi";
 const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProduct: builder.query({
-      query: () => {
+      query: (searchData) => {
+        console.log('search data--->', searchData);
         return {
-          url: "/products",
+          url: `/products?searchTerm=${searchData?.searchTerm}`,
           method: "GET",
         };
       },

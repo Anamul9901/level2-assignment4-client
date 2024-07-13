@@ -8,15 +8,30 @@ import {
 } from "../../redux/features/products/products";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { IoSearchSharp } from "react-icons/io5";
 
 const Product = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [productId, setProductId] = useState("");
-  const { data } = useGetAllProductQuery(undefined);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sort, setSort] = useState('');
+  const [limit, setLimit] = useState('');
+  const [page, setPage] = useState('');
+
+  const searchData= {searchTerm, sort, limit, page}
+  const { data } = useGetAllProductQuery(searchData);
   const products = data?.data;
 
   const [deleteProduct, {}] = useDeleteProductMutation();
   const [updateProduct, {}] = useUpdateProductMutation();
+
+  const handleSearch = (e: any)=>{
+    e.preventDefault();
+    const searchText = e.target.search.value;
+    console.log(searchText);
+    // refetch();
+    setSearchTerm(searchText);
+  }
 
   const handleProductDelete = async (id: string) => {
     Swal.fire({
@@ -67,31 +82,45 @@ const Product = () => {
     const res = await updateProduct(options);
     console.log("updted res data =>", res);
     form.reset();
-    if(res?.data?.success === true){
-      navigate('/')
+    if (res?.data?.success === true) {
+      navigate("/");
       Swal.fire({
         position: "top-end",
         icon: "success",
         title: "Updated Successfully",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
     }
   };
 
   return (
     <div className="py-16 mb-10">
-      <div>
-        <Link
-          to={"/add-product"}
-          className="btn-primary p-1 bg-green-400 rounded-md text-white font-bold"
-        >
-          Add Product
-        </Link>
+      <div className="flex justify-end items-center gap-3">
+        <div>
+          <Link
+            to={"/add-product"}
+            className="btn p-1 bg-green-400 rounded-md text-white font-bold"
+          >
+            Add Product
+          </Link>
+        </div>
+        <form onSubmit={handleSearch}>
+        <div className="flex items-center">
+          <input
+            type="text"
+            name="search"
+            placeholder="Type here"
+            className="input border border-green-300 rounded-r-none w-full max-w-xs"
+          />
+          <button type="submit" className="btn border-green-300 rounded-l-none">
+            <IoSearchSharp />
+          </button>
+        </div>
+        </form>
       </div>
       <h2 className="md:text-4xl text-xl pb-10 text-center font-bold">
-        Just For You
-        <span className="text-sm text-[#f76b00]">(Sold Products)</span>
+        All Product
       </h2>
       <div className=" ">
         <div className="grid  grid-cols-2 px-1 md:px-0 md:grid-cols-4 lg:grid-cols-5 gap-3  ">

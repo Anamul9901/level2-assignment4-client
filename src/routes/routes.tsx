@@ -7,6 +7,7 @@ import SingleProduct from "../pages/SingleProduct/SingleProduct";
 import Register from "../pages/Register";
 import App from "../App";
 import Payment from "../pages/Payment/Payment";
+import Product from "../components/Product/Product";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/add-product",
         element: <AddProduct />,
+      },
+      {
+        path: "/products",
+        element: <Product />,
       },
       {
         path: "/product/:id",
