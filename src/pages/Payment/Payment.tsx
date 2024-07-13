@@ -3,7 +3,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "./CheckoutForm";
 
 const Payment = () => {
-  // TODO: add publishable key
   const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway);
   // console.log(stripePromise);
   return (

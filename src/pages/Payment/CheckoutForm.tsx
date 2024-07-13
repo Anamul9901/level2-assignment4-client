@@ -1,7 +1,11 @@
+/* eslint-disable no-empty-pattern */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
-import { useCreatePaymentMutation } from "../../redux/features/payment/payment";
+import {
+  useCreatePaymentMutation,
+  useCreateUserPayDataMutation,
+} from "../../redux/features/payment/payment";
 import { useGetAllCartQuery } from "../../redux/features/carts/carts";
 import { useAppSelector } from "../../redux/hooks";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
@@ -10,6 +14,7 @@ import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 const CheckoutForm = () => {
   const [error, setError] = useState("");
   const [clientSecret, setClientSecret] = useState("");
+  const [transctionId, setTransctionId] = useState("");
   const stripe = useStripe();
   const elements = useElements();
 
@@ -22,7 +27,8 @@ const CheckoutForm = () => {
   const currentUserCart = cartData?.filter(
     (cart: any) => cart.userId == user?._id
   );
-  // console.log("all cart", currentUserCart);
+  const allCartId = currentUserCart?.map((item: any) => item?._id);
+  // console.log("all cart", allCartId);
 
   let totalPrice = 0;
   for (let i = 0; i < currentUserCart?.length; i++) {
@@ -30,14 +36,25 @@ const CheckoutForm = () => {
   }
   // console.log(totalPrice); // Output: 80
 
-  const [createPayment, { isError }] = useCreatePaymentMutation();
+  const [createPayment, {}] = useCreatePaymentMutation();
+  const [createUserPayData, {}] = useCreateUserPayDataMutation();
 
   // console.log("res error", isError);
+  const totalPriceObjet = { amount: totalPrice };
 
   useEffect(() => {
-    const res = createPayment(totalPrice);
-    console.log("res data===>", res);
-    setClientSecret(res as any);
+    const fetchPayment = async () => {
+      try {
+        const res = await createPayment(totalPriceObjet).unwrap();
+        // console.log("res data===>", res);
+        setClientSecret(res as any);
+        setClientSecret(res);
+      } catch (error) {
+        // console.error("Error creating payment:", error);
+      }
+    };
+
+    fetchPayment();
   }, [totalPrice]);
 
   const handleSubmit = async (event: any) => {
@@ -58,11 +75,13 @@ const CheckoutForm = () => {
     });
 
     if (error) {
-      console.log("payment error", error);
+      // console.log("payment error", error);
       setError((error as any).message);
+      setTransctionId("");
     } else {
-      console.log("payment method", paymentMethod);
+      // console.log("payment method", paymentMethod);
       setError("");
+      setTransctionId("");
     }
     // confirm payment
     const { paymentIntent, error: confirmError } =
@@ -77,11 +96,28 @@ const CheckoutForm = () => {
       });
 
     if (confirmError) {
-      console.log("confirm error");
+      // console.log("confirm error");
     } else {
-      console.log("Pyment intent", paymentIntent);
+      // console.log("Pyment intent", paymentIntent);
+      setTransctionId("");
+      if (paymentIntent?.status === "succeeded") {
+        console.log("transaction id", paymentIntent.id);
+        setTransctionId(paymentIntent?.id);
+
+        //now save the payment in the database
+        const payment = {
+          email: user?.email,
+          price: totalPrice,
+          transactionId: paymentIntent?.id,
+          cartId: allCartId,
+          status: "pending",
+        };
+
+        const res = await createUserPayData(payment);
+        console.log("user save data", res);
+      }
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -112,6 +148,9 @@ const CheckoutForm = () => {
         Pay
       </button>
       <p className="text-red-600">{error}</p>
+      {transctionId && (
+        <p className="text-green-600">Transaction ID: {transctionId}</p>
+      )}
     </form>
   );
 };
