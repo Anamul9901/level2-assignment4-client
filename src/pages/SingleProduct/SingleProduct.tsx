@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 
 const SingleProduct = () => {
   const { id } = useParams();
-  const navigation = useNavigate()
+  const navigation = useNavigate();
   // console.log(id);
   const user = useAppSelector(selectCurrentUser);
   console.log(user?._id);
@@ -29,13 +29,22 @@ const SingleProduct = () => {
         confirmButtonText: "Ok!",
       }).then((result) => {
         if (result.isConfirmed) {
-          navigation('/login')
+          navigation("/login");
         }
       });
     }
     console.log(id);
     const data = { productId: id, userId: user?._id };
     const res = await addCart(data);
+    if (res?.data?.success === true) {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "This Product added in cart",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
     console.log("success add cart", res);
   };
   return (
@@ -45,17 +54,19 @@ const SingleProduct = () => {
           <div className="">
             <img
               src={cartData?.image}
-              className="max-w-sm rounded-lg shadow-2xl"
+              className="max-w-sm w-[90%] rounded-lg shadow-2xl"
             />
           </div>
           <div className="flex justify-center flex-col items-center gap-2">
             <h1 className="text-4xl font-bold">{cartData?.name}</h1>
             <p className="">{cartData?.title}</p>
             <p className="">Categiry: {cartData?.category}</p>
-           <div className="flex justify-around gap-8">
-           <p className="text-xl font-semibold">Quantity: {cartData?.quantity}</p>
-           <p className="text-xl font-semibold">Price: {cartData?.price}</p>
-           </div>
+            <div className="flex justify-around gap-8">
+              <p className="text-xl font-semibold">
+                Quantity: {cartData?.quantity}
+              </p>
+              <p className="text-xl font-semibold">Price: {cartData?.price}</p>
+            </div>
             <div className="flex">
               <button
                 onClick={handleAddToCart}
