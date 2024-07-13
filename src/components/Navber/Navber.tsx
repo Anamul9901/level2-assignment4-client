@@ -59,35 +59,7 @@ const Navber = () => {
         </NavLink>
       </li>
 
-      <li>
-        <NavLink
-          to="/about-us"
-          className={({ isActive, isPending }) =>
-            isPending
-              ? "pending"
-              : isActive
-              ? "text-[#050506] underline font-black md:text-xl "
-              : "lg:text-white text-[#09962f] font-bold md:text-xl"
-          }
-        >
-          About Us
-        </NavLink>
-      </li>
-
-      <li>
-        <NavLink
-          to="/contact-us"
-          className={({ isActive, isPending }) =>
-            isPending
-              ? "pending"
-              : isActive
-              ? "text-[#050506] underline font-black md:text-xl "
-              : "lg:text-white text-[#09962f] font-bold md:text-xl"
-          }
-        >
-          Contact Us
-        </NavLink>
-      </li>
+   
     </>
   );
   return (
