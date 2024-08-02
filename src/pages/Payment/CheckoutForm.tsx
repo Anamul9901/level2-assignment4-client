@@ -20,7 +20,6 @@ const CheckoutForm = () => {
   const elements = useElements();
 
   const { data } = useGetAllCartQuery(undefined);
-  
 
   const cartData = data?.data;
   // console.log(cartData);
@@ -90,7 +89,7 @@ const CheckoutForm = () => {
         icon: "success",
         title: "Your Payment is Success",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
     }
     // confirm payment
@@ -123,7 +122,7 @@ const CheckoutForm = () => {
           status: "pending",
         };
 
-        const res = await createUserPayData(payment);
+        await createUserPayData(payment);
         // console.log("user save data", res);
       }
     }
@@ -132,39 +131,41 @@ const CheckoutForm = () => {
   return (
     <div className="border mt-10 pb-10 md:px-4 px-1 rounded-md bg-slate-100">
       <div className="flex justify-center">
-        <p className="text-2xl font-bold text-green-500 pt-10 pb-10">Total Amount: {totalPrice}</p>
+        <p className="text-2xl font-bold text-green-500 pt-10 pb-10">
+          Total Amount: {totalPrice}
+        </p>
       </div>
       <form onSubmit={handleSubmit}>
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: "16px",
-              color: "#424770",
-              "::placeholder": {
-                color: "#aab7c4",
+        <CardElement
+          options={{
+            style: {
+              base: {
+                fontSize: "16px",
+                color: "#424770",
+                "::placeholder": {
+                  color: "#aab7c4",
+                },
+              },
+              invalid: {
+                color: "#9e2146",
               },
             },
-            invalid: {
-              color: "#9e2146",
-            },
-          },
-        }}
-      />
-     <div className="flex justify-center pt-10">
-     <button
-        className="btn btn-sm bg-green-500 text-white"
-        type="submit"
-        disabled={!stripe || !clientSecret}
-      >
-        Pay
-      </button>
-     </div>
-      <p className="text-red-600">{error}</p>
-      {transctionId && (
-        <p className="text-green-600">Transaction ID: {transctionId}</p>
-      )}
-    </form>
+          }}
+        />
+        <div className="flex justify-center pt-10">
+          <button
+            className="btn btn-sm bg-green-500 text-white"
+            type="submit"
+            disabled={!stripe || !clientSecret}
+          >
+            Pay
+          </button>
+        </div>
+        <p className="text-red-600">{error}</p>
+        {transctionId && (
+          <p className="text-green-600">Transaction ID: {transctionId}</p>
+        )}
+      </form>
     </div>
   );
 };

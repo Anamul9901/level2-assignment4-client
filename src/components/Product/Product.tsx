@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useDeleteProductMutation,
   useGetAllProductQuery,
@@ -18,16 +18,19 @@ const Product = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
+  const [finalProducts, setFinalProducts] = useState([]);
 
   const searchData = { searchTerm, limit, page };
   const { data } = useGetAllProductQuery(searchData);
   const products = data?.data?.fieldQuery;
+  useEffect(() => {
+    setFinalProducts(products);
+  }, [products]);
 
   let productLength = 10;
   if (data?.data?.productsLength) {
     productLength = data?.data?.productsLength;
   }
-  // console.log("products", productLength);
 
   const numberOfPages = Math.ceil(productLength / limit);
   // console.log("number of page", numberOfPages);
@@ -122,12 +125,20 @@ const Product = () => {
     const val = parseInt(e.target.value);
     // console.log(val);
     setLimit(val);
-    setPage(1)
+    setPage(1);
   };
 
   const setCurrentPage = (page: number) => {
-    // console.log("current page", page);
+    console.log("current page", page);
     setPage(page + 1);
+  };
+
+  // catagory button handler
+  const handleCatagory = (data: string) => {
+    const filterProducts = products.filter(
+      (item: any) => item?.category == data
+    );
+    setFinalProducts(filterProducts);
   };
 
   return (
@@ -161,9 +172,18 @@ const Product = () => {
       <h2 className="md:text-4xl text-xl pb-10 text-center font-bold">
         All Product
       </h2>
+
+      {/* catagory button  */}
+      <div className="pb-1">
+      <div className="flex gap-3 bg-green-200 px-2 rounded-md w-44 justify-center font-semibold ">
+        <button onClick={() => handleCatagory("Flower")}>Flower</button>
+        <button onClick={() => handleCatagory("Fruit")}>Fruit</button>
+        <button onClick={() => handleCatagory("Timber")}>Timber</button>
+      </div>
+      </div>
       <div className=" ">
         <div className="grid  grid-cols-2 px-1 md:px-0 md:grid-cols-4 lg:grid-cols-5 gap-3  ">
-          {products?.map((product: any) => (
+          {finalProducts?.map((product: any) => (
             <div key={product?._id}>
               <div className=" bg-base-100 shadow-xl  h-full">
                 <Link to={`/product/${product?._id}`}>

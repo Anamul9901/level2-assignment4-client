@@ -11,7 +11,7 @@ const AddProduct = () => {
   const user = useAppSelector(selectCurrentUser);
   const userId = user?._id;
   // console.log("current-user", userId);
- 
+
 
   const [createProduct, {}] = useCreateProductMutation();
   const handleAddProduct = async (e: any) => {
@@ -94,16 +94,15 @@ const AddProduct = () => {
               <input
                 type="img"
                 placeholder="Img URL"
-                className="input input-bordered w-full max-w-xs"
+                className="input input-bordered max-w-xs"
                 name="image"
               />
-              <input
-                type="text"
-                placeholder="Category"
-                className="input input-bordered w-full max-w-xs"
-                name="category"
-                required
-              />
+              <select className="select select-bordered w-full max-w-xs" name="category">
+                <option disabled selected>Select catagory</option>
+                <option>Flower</option>
+                <option>Fruit</option>
+                <option>Timber</option>
+              </select>
             </div>
 
             <div className="flex gap-2 pb-3">
