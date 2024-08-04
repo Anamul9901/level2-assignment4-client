@@ -8,6 +8,7 @@ import Register from "../pages/Register";
 import App from "../App";
 import Payment from "../pages/Payment/Payment";
 import ProductPage from "../pages/ProductPage/ProductPage";
+import UserInfo from "../pages/UserInfo/UserInfo";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/payment",
         element: <Payment />,
+      },
+      {
+        path: "/user-info",
+        element: <UserInfo />,
       },
     ],
   },

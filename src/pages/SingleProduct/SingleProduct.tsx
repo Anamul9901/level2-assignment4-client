@@ -1,42 +1,23 @@
 /* eslint-disable no-empty-pattern */
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useGetSingleProductQuery } from "../../redux/features/products/products";
-import { useAddCartMutation } from "../../redux/features/carts/carts";
-import { useAppSelector } from "../../redux/hooks";
-import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import Swal from "sweetalert2";
 
 const SingleProduct = () => {
   const { id } = useParams();
-  const navigation = useNavigate();
-  // console.log(id);
-  const user = useAppSelector(selectCurrentUser);
-  // console.log(user?._id);
 
   const { data } = useGetSingleProductQuery(id);
   const cartData = data?.data;
-  const [addCart, {}] = useAddCartMutation();
 
+  console.log(cartData?.quantity);
   const handleAddToCart = async () => {
-    if (!user) {
-      Swal.fire({
-        title: "You are not Login?",
-        text: "Login first. Redirect Login page",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Ok!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigation("/login");
-        }
-      });
-    }
-    // console.log(id);
-    const data = { productId: id, userId: user?._id };
-    const res = await addCart(data);
-    if (res?.data?.success === true) {
+    const existingCartProducts =
+      JSON.parse(localStorage.getItem("cartProducts") as string) || [];
+
+    const updatedCartProducts = [...existingCartProducts, cartData];
+    if (cartData?.quantity > 0) {
+      localStorage.setItem("cartProducts", JSON.stringify(updatedCartProducts));
+      
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -44,8 +25,15 @@ const SingleProduct = () => {
         showConfirmButton: false,
         timer: 1500,
       });
+    }else{
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "This Product quantity is 0",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
-    // console.log("success add cart", res);
   };
   return (
     <div className="max-w-7xl mx-auto w-full py-10 ">

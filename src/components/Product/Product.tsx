@@ -19,6 +19,8 @@ const Product = () => {
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const [finalProducts, setFinalProducts] = useState([]);
+  const [selectUpdatedProduct, setSelectUpdatedProduct] = useState();
+  const [defaultCategory, setDefaultCategory] = useState();
 
   const searchData = { searchTerm, limit, page };
   const { data } = useGetAllProductQuery(searchData);
@@ -32,10 +34,15 @@ const Product = () => {
     productLength = data?.data?.productsLength;
   }
 
+  useEffect(() => {
+    const allProduct = data?.data?.fieldQuery;
+    const updatedProduct = allProduct?.find(
+      (item: any) => item?._id === productId
+    );
+    setSelectUpdatedProduct(updatedProduct);
+  }, [productId, data?.data?.fieldQuery]);
   const numberOfPages = Math.ceil(productLength / limit);
-  // console.log("number of page", numberOfPages);
   const pages = [...Array(numberOfPages).keys()]; // for lup er shortcut
-  // console.log(pages);
 
   const [deleteProduct, {}] = useDeleteProductMutation();
   const [updateProduct, {}] = useUpdateProductMutation();
@@ -43,8 +50,6 @@ const Product = () => {
   const handleSearch = (e: any) => {
     e.preventDefault();
     const searchText = e.target.search.value;
-    // console.log(searchText);
-    // refetch();
     setSearchTerm(searchText);
   };
 
@@ -71,6 +76,7 @@ const Product = () => {
 
   const handleUpdatePrductId = (id: any) => {
     setProductId(id);
+    setDefaultCategory(undefined)
   };
 
   const handleProductUpdate = async (e: any) => {
@@ -95,7 +101,6 @@ const Product = () => {
       },
     };
     const res = await updateProduct(options);
-    // console.log("updted res data =>", res);
     form.reset();
     if (res?.data?.success === true) {
       navigate("/");
@@ -123,13 +128,11 @@ const Product = () => {
 
   const handleItemsPerPage = (e: any) => {
     const val = parseInt(e.target.value);
-    // console.log(val);
     setLimit(val);
     setPage(1);
   };
 
   const setCurrentPage = (page: number) => {
-    console.log("current page", page);
     setPage(page + 1);
   };
 
@@ -175,11 +178,11 @@ const Product = () => {
 
       {/* catagory button  */}
       <div className="pb-1">
-      <div className="flex gap-3 bg-green-200 px-2 rounded-md w-44 justify-center font-semibold ">
-        <button onClick={() => handleCatagory("Flower")}>Flower</button>
-        <button onClick={() => handleCatagory("Fruit")}>Fruit</button>
-        <button onClick={() => handleCatagory("Timber")}>Timber</button>
-      </div>
+        <div className="flex gap-3 bg-green-200 px-2 rounded-md w-44 justify-center font-semibold ">
+          <button onClick={() => handleCatagory("Flower")}>Flower</button>
+          <button onClick={() => handleCatagory("Fruit")}>Fruit</button>
+          <button onClick={() => handleCatagory("Timber")}>Timber</button>
+        </div>
       </div>
       <div className=" ">
         <div className="grid  grid-cols-2 px-1 md:px-0 md:grid-cols-4 lg:grid-cols-5 gap-3  ">
@@ -198,6 +201,12 @@ const Product = () => {
                         Price:{" "}
                         <span className="font-bold text-lg text-[#f76b00]">
                           {product.price}
+                        </span>
+                      </p>
+                      <p>
+                        Quantity:{" "}
+                        <span className="font-bold text-lg text-[#f76b00]">
+                          {product.quantity}
                         </span>
                       </p>
                     </div>
@@ -244,12 +253,14 @@ const Product = () => {
                             placeholder="Product Name"
                             className="input input-bordered w-full max-w-xs"
                             name="name"
+                            defaultValue={(selectUpdatedProduct as any)?.name}
                           />
                           <input
                             type="text"
                             placeholder="Product Title"
                             className="input input-bordered w-full max-w-xs"
                             name="title"
+                            defaultValue={(selectUpdatedProduct as any)?.title}
                           />
                         </div>
 
@@ -259,13 +270,22 @@ const Product = () => {
                             placeholder="Img URL"
                             className="input input-bordered w-full max-w-xs"
                             name="image"
+                            defaultValue={(selectUpdatedProduct as any)?.image}
                           />
-                          <input
-                            type="text"
-                            placeholder="Category"
-                            className="input input-bordered w-full max-w-xs"
+                          <select
+                            className="select select-bordered w-full max-w-xs"
                             name="category"
-                          />
+                            value={
+                              defaultCategory || (selectUpdatedProduct as any)?.category
+                            }
+                            onChange={(e) => {
+                              setDefaultCategory(e?.target?.value as any);
+                            }}
+                          >
+                            <option value="Flower">Flower</option>
+                            <option value="Fruit">Fruit</option>
+                            <option value="Timber">Timber</option>
+                          </select>
                         </div>
 
                         <div className="flex gap-1 pb-3">
@@ -274,14 +294,14 @@ const Product = () => {
                             placeholder="Price"
                             className="input input-bordered w-full max-w-xs"
                             name="price"
-                            required
+                            defaultValue={(selectUpdatedProduct as any)?.price}
                           />
                           <input
                             type="number"
                             placeholder="Quantity"
                             className="input input-bordered w-full max-w-xs"
                             name="quantity"
-                            required
+                            defaultValue={(selectUpdatedProduct as any)?.quantity}
                           />
                         </div>
 

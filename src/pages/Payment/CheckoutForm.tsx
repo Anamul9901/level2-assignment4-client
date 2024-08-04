@@ -10,6 +10,7 @@ import { useGetAllCartQuery } from "../../redux/features/carts/carts";
 import { useAppSelector } from "../../redux/hooks";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const CheckoutForm = () => {
@@ -18,37 +19,35 @@ const CheckoutForm = () => {
   const [transctionId, setTransctionId] = useState("");
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate();
 
   const { data } = useGetAllCartQuery(undefined);
 
   const cartData = data?.data;
   // console.log(cartData);
   const user = useAppSelector(selectCurrentUser);
-  // console.log(user?._id);
+  // console.log(user);
 
   const currentUserCart = cartData?.filter(
     (cart: any) => cart.userId == user?._id
   );
   const allCartId = currentUserCart?.map((item: any) => item?._id);
-  // console.log("all cart", allCartId);
+  const localCartData = JSON.parse(localStorage.getItem('cartProducts') as string)
 
   let totalPrice = 0;
-  for (let i = 0; i < currentUserCart?.length; i++) {
-    totalPrice += currentUserCart[i]?.productId?.price;
+  for (let i = 0; i < localCartData?.length; i++) {
+    totalPrice += localCartData[i]?.price;
   }
-  // console.log(totalPrice); // Output: 80
 
   const [createPayment, {}] = useCreatePaymentMutation();
   const [createUserPayData, {}] = useCreateUserPayDataMutation();
 
-  // console.log("res error", isError);
   const totalPriceObjet = { amount: totalPrice };
 
   useEffect(() => {
     const fetchPayment = async () => {
       try {
         const res = await createPayment(totalPriceObjet).unwrap();
-        // console.log("res data===>", res);
         setClientSecret(res as any);
         setClientSecret(res);
       } catch (error) {
@@ -61,6 +60,24 @@ const CheckoutForm = () => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    if(!user){
+      Swal.fire({
+        title: "You are not Lonin?",
+        text: "Are you want to login!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Login page",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/login')
+        }
+      });
+    }
+    if(!user){
+      throw new Error('You are not login')
+    }
     if (!stripe || !elements) {
       return;
     }
@@ -77,11 +94,9 @@ const CheckoutForm = () => {
     });
 
     if (error) {
-      // console.log("payment error", error);
       setError((error as any).message);
       setTransctionId("");
     } else {
-      // console.log("payment method", paymentMethod);
       setError("");
       setTransctionId("");
       Swal.fire({
@@ -158,7 +173,7 @@ const CheckoutForm = () => {
             type="submit"
             disabled={!stripe || !clientSecret}
           >
-            Pay
+            Online Payment
           </button>
         </div>
         <p className="text-red-600">{error}</p>
