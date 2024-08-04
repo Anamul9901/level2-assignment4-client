@@ -12,7 +12,9 @@ const Payment = () => {
   // console.log(stripePromise);
 
   const handleSaveUserInfo = () => {
+    const paymentType = 'Cash On'
     const userData = JSON.parse(localStorage.getItem("userData") as any);
+    userData.paymentType = paymentType;
     console.log(userData);
     Swal.fire({
       position: "top-end",

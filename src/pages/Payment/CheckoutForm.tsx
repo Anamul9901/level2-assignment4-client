@@ -141,6 +141,13 @@ const CheckoutForm = () => {
         // console.log("user save data", res);
       }
     }
+
+    const userInfo = JSON.parse(localStorage.getItem('userData') as any)
+    userInfo.paymentType = 'Online'
+    console.log(userInfo);
+    localStorage.removeItem("userData");
+    localStorage.removeItem("cartProducts");
+    navigate("/");
   };
 
   return (
