@@ -5,27 +5,33 @@ import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "./CheckoutForm";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { useAddBuyInfoMutation } from "../../redux/features/buyInfo/buyInfo";
 
 const Payment = () => {
   const navigate = useNavigate();
   const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway);
   // console.log(stripePromise);
 
-  const handleSaveUserInfo = () => {
-    const paymentType = 'Cash On'
+  const [addBuyInfo, { isError }] = useAddBuyInfoMutation();
+
+  const handleSaveUserInfo = async () => {
+    const paymentType = "Cash On";
     const userData = JSON.parse(localStorage.getItem("userData") as any);
     userData.paymentType = paymentType;
-    console.log(userData);
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Successfull",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    localStorage.removeItem("userData");
-    localStorage.removeItem("cartProducts");
-    navigate("/");
+    const res = await addBuyInfo(userData);
+    if (res?.data) {
+      console.log("res", res);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Successfull",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      localStorage.removeItem("userData");
+      localStorage.removeItem("cartProducts");
+      navigate("/");
+    }
   };
   return (
     <div className="h-[90vh] max-w-7xl mx-auto w-full">

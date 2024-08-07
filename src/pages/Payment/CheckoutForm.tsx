@@ -11,6 +11,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { useAddBuyInfoMutation } from "../../redux/features/buyInfo/buyInfo";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const CheckoutForm = () => {
@@ -22,6 +23,7 @@ const CheckoutForm = () => {
   const navigate = useNavigate();
 
   const { data } = useGetAllCartQuery(undefined);
+  const [addBuyInfo, {}] = useAddBuyInfoMutation();
 
   const cartData = data?.data;
   // console.log(cartData);
@@ -32,7 +34,9 @@ const CheckoutForm = () => {
     (cart: any) => cart.userId == user?._id
   );
   const allCartId = currentUserCart?.map((item: any) => item?._id);
-  const localCartData = JSON.parse(localStorage.getItem('cartProducts') as string)
+  const localCartData = JSON.parse(
+    localStorage.getItem("cartProducts") as string
+  );
 
   let totalPrice = 0;
   for (let i = 0; i < localCartData?.length; i++) {
@@ -60,7 +64,7 @@ const CheckoutForm = () => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if(!user){
+    if (!user) {
       Swal.fire({
         title: "You are not Lonin?",
         text: "Are you want to login!",
@@ -71,12 +75,12 @@ const CheckoutForm = () => {
         confirmButtonText: "Login page",
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate('/login')
+          navigate("/login");
         }
       });
     }
-    if(!user){
-      throw new Error('You are not login')
+    if (!user) {
+      throw new Error("You are not login");
     }
     if (!stripe || !elements) {
       return;
@@ -142,12 +146,15 @@ const CheckoutForm = () => {
       }
     }
 
-    const userInfo = JSON.parse(localStorage.getItem('userData') as any)
-    userInfo.paymentType = 'Online'
+    const userInfo = JSON.parse(localStorage.getItem("userData") as any);
+    userInfo.paymentType = "Online";
     console.log(userInfo);
-    localStorage.removeItem("userData");
-    localStorage.removeItem("cartProducts");
-    navigate("/");
+    const res = await addBuyInfo(userInfo);
+    if (res?.data) {
+      localStorage.removeItem("userData");
+      localStorage.removeItem("cartProducts");
+      navigate("/");
+    }
   };
 
   return (
