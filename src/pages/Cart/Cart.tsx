@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import { useAppSelector } from "../../redux/hooks";
 import Swal from "sweetalert2";
-import { useEffect } from "react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const Cart = () => {

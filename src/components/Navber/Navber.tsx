@@ -28,7 +28,7 @@ const Navber = () => {
           Home
         </NavLink>
       </li>
-      
+
       <li>
         <NavLink
           to="/products"
@@ -58,8 +58,22 @@ const Navber = () => {
           Add-Product
         </NavLink>
       </li>
-
-   
+      {user && (
+        <li>
+          <NavLink
+            to="/pay-history"
+            className={({ isActive, isPending }) =>
+              isPending
+                ? "pending"
+                : isActive
+                ? "text-[#050506] underline font-black md:text-xl "
+                : "lg:text-white text-[#09962f] font-bold md:text-xl"
+            }
+          >
+            Ordered
+          </NavLink>
+        </li>
+      )}
     </>
   );
   return (
@@ -106,9 +120,11 @@ const Navber = () => {
             <ul className="menu menu-horizontal px-1">{navitem}</ul>
           </div>
           <div className="navbar-end">
-          <div className="pr-4">
-            <Link className="text-2xl hover:text-3xl" to='/cart'><BsCartCheck /></Link>
-          </div>
+            <div className="pr-4">
+              <Link className="text-2xl hover:text-3xl" to="/cart">
+                <BsCartCheck />
+              </Link>
+            </div>
             {user ? (
               <div className="flex items-center">
                 <div className="flex flex-row-reverse items-center">
@@ -132,11 +148,13 @@ const Navber = () => {
                   </div>
                 </div>
                 <button onClick={handleLogout} className=" ">
-                  <h1 className="text-2xl hover:text-3xl"><FiLogOut /></h1>
+                  <h1 className="text-2xl hover:text-3xl">
+                    <FiLogOut />
+                  </h1>
                 </button>
               </div>
             ) : (
-              <Link  to="/login">
+              <Link to="/login">
                 <button className="btn btn-sm bg-white hover:text-[#080403] text-black font-bold">
                   Log In
                 </button>

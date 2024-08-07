@@ -18,6 +18,7 @@ const Payment = () => {
     const paymentType = "Cash On";
     const userData = JSON.parse(localStorage.getItem("userData") as any);
     userData.paymentType = paymentType;
+    console.log('userdata', userData);
     const res = await addBuyInfo(userData);
     if (res?.data) {
       console.log("res", res);

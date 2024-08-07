@@ -3,12 +3,14 @@ import { baseApi } from "../../api/baseApi";
 const buyInfoApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllBuyInfo: builder.query({
-      query: () => {
+      query: (email) => {
         return {
           url: "/buyinfo",
           method: "GET",
+          params: { email },
         };
       },
+      providesTags: ["product"],
     }),
 
     addBuyInfo: builder.mutation({
@@ -19,8 +21,9 @@ const buyInfoApi = baseApi.injectEndpoints({
           body: data,
         };
       },
+      invalidatesTags: ["product"],
     }),
   }),
 });
 
-export const {useGetAllBuyInfoQuery, useAddBuyInfoMutation} = buyInfoApi
+export const { useGetAllBuyInfoQuery, useAddBuyInfoMutation } = buyInfoApi;

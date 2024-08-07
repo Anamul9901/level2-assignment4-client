@@ -9,6 +9,7 @@ import App from "../App";
 import Payment from "../pages/Payment/Payment";
 import ProductPage from "../pages/ProductPage/ProductPage";
 import UserInfo from "../pages/UserInfo/UserInfo";
+import PaymentHistory from "../pages/PaymentHistory/PaymentHistory";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/user-info",
         element: <UserInfo />,
+      },
+      {
+        path: "/pay-history",
+        element: <PaymentHistory />,
       },
     ],
   },

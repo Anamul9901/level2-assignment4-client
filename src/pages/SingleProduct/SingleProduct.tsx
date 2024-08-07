@@ -8,6 +8,7 @@ const SingleProduct = () => {
 
   const { data } = useGetSingleProductQuery(id);
   const cartData = data?.data;
+  console.log(cartData);
 
   console.log(cartData?.quantity);
   const handleAddToCart = async () => {
@@ -15,9 +16,10 @@ const SingleProduct = () => {
       JSON.parse(localStorage.getItem("cartProducts") as string) || [];
 
     const updatedCartProducts = [...existingCartProducts, cartData];
+    console.log(updatedCartProducts);
     if (cartData?.quantity > 0) {
       localStorage.setItem("cartProducts", JSON.stringify(updatedCartProducts));
-      
+
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -25,7 +27,7 @@ const SingleProduct = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-    }else{
+    } else {
       Swal.fire({
         position: "top-end",
         icon: "error",
