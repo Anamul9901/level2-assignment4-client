@@ -2,7 +2,7 @@ import Product from "../../components/Product/Product";
 
 const ProductPage = () => {
   return (
-    <div className="max-w-7xl mx-auto w-full h-[92vh]">
+    <div className="max-w-7xl mx-auto w-full min-h-screen h-[100%]">
       <Product />
     </div>
   );

@@ -7,11 +7,10 @@ import { useNavigate } from "react-router-dom";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const AddProduct = () => {
-  const navigation= useNavigate()
+  const navigation = useNavigate();
   const user = useAppSelector(selectCurrentUser);
   const userId = user?._id;
   // console.log("current-user", userId);
-
 
   const [createProduct, {}] = useCreateProductMutation();
   const handleAddProduct = async (e: any) => {
@@ -27,7 +26,7 @@ const AddProduct = () => {
         confirmButtonText: "Ok!",
       }).then((result) => {
         if (result.isConfirmed) {
-          navigation('/login')
+          navigation("/login");
         }
       });
     }
@@ -38,6 +37,7 @@ const AddProduct = () => {
     const category = form.category.value;
     const price = Number(form.price.value);
     const quantity = Number(form.quantity.value);
+    const rating = Number(form.rating.value);
 
     const productData = {
       name,
@@ -47,22 +47,23 @@ const AddProduct = () => {
       price,
       quantity,
       user: userId,
+      rating,
     };
-    // console.log(productData);
+    console.log(productData);
     // if (!user) {
     //   alert("user not found! Login first");
     // } else {
     const res = await createProduct(productData);
     // console.log("add product--->", res);
-    if(res?.data?.success === true){
+    if (res?.data?.success === true) {
       Swal.fire({
         position: "top-end",
         icon: "success",
         title: "Your work has been saved",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
-      navigation('/')
+      navigation("/");
     }
     // }
   };
@@ -77,16 +78,17 @@ const AddProduct = () => {
             <div className="flex gap-2 pb-3">
               <input
                 type="text"
-                placeholder="Product Name"
+                placeholder="Product Title"
                 className="input input-bordered w-full max-w-xs"
                 name="name"
                 required
               />
               <input
-                type="text"
-                placeholder="Product Title"
-                className="input input-bordered w-full max-w-xs"
-                name="title"
+                type="number"
+                placeholder="Rating"
+                className="input input-bordered w-full"
+                name="rating"
+                required
               />
             </div>
 
@@ -97,8 +99,13 @@ const AddProduct = () => {
                 className="input input-bordered max-w-xs"
                 name="image"
               />
-              <select className="select select-bordered w-full max-w-xs" name="category">
-                <option disabled selected>Select catagory</option>
+              <select
+                className="select select-bordered w-full max-w-xs"
+                name="category"
+              >
+                <option disabled selected>
+                  Select catagory
+                </option>
                 <option>Flower</option>
                 <option>Fruit</option>
                 <option>Timber</option>
@@ -119,6 +126,14 @@ const AddProduct = () => {
                 className="input input-bordered w-full max-w-xs"
                 name="quantity"
                 required
+              />
+            </div>
+            <div className="flex gap-2 pb-3">
+              <input
+                type="text"
+                placeholder="Product description"
+                className="input input-bordered w-full"
+                name="title"
               />
             </div>
 

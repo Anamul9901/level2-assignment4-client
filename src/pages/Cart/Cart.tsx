@@ -4,12 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import { useAppSelector } from "../../redux/hooks";
 import Swal from "sweetalert2";
+import { useEffect } from "react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const Cart = () => {
   const navigate = useNavigate();
-
-  const cartData = JSON.parse(localStorage.getItem("cartProducts") as string);
+  let cartData = JSON.parse(localStorage.getItem("cartProducts") as string);
 
   const user = useAppSelector(selectCurrentUser);
 
@@ -18,54 +18,60 @@ const Cart = () => {
     totalPrice += cartData[i]?.price;
   }
 
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event) => {
-  //     const confirmationMessage = "Are you sure you want to refresh? This will delete your cart items.";
+  useEffect(() => {
+    const handleBeforeUnload = (event: any) => {
+      const confirmationMessage =
+        "Are you sure you want to refresh? This will delete your cart items.";
 
-  //     try {
-  //       const userResponse = window.confirm("Do you want to delete the cart data....?");
-  //       console.log(userResponse);
+      try {
+        const userResponse = window.confirm(
+          "Do you want to delete the cart data....?"
+        );
 
-  //       localStorage.removeItem("cartProducts");
-  //       if (userResponse) {//
-  //       } else {
-  //         event.preventDefault();
-  //         event.returnValue = confirmationMessage;
-  //       }
-  //     } catch (error) {
-  //       console.error("Error handling beforeunload:", error);
-  //       // Handle error gracefully, e.g., log to an error tracking service
-  //     }
-  //   };
+        localStorage.removeItem("cartProducts");
+        if (userResponse) {
+          //
+        } else {
+          event.preventDefault();
+          event.returnValue = confirmationMessage;
+        }
+      } catch (error) {
+        console.error("Error handling beforeunload:", error);
+      }
+    };
 
-  //   window.onbeforeunload = handleBeforeUnload;
+    window.onbeforeunload = handleBeforeUnload;
 
-  //   // Cleanup the event listener on component unmount
-  //   return () => {
-  //     window.onbeforeunload = null;
-  //   };
-  // }, []);
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
 
   const handleCartDelete = async (id: any) => {
-    //   console.log(id);
-    //   Swal.fire({
-    //     title: "Are you sure?",
-    //     text: "You won't be able to revert this!",
-    //     icon: "warning",
-    //     showCancelButton: true,
-    //     confirmButtonColor: "#3085d6",
-    //     cancelButtonColor: "#d33",
-    //     confirmButtonText: "Yes, delete it!",
-    //   }).then((result) => {
-    //     if (result.isConfirmed) {
-    //       Swal.fire({
-    //         title: "Deleted!",
-    //         text: "Your file has been deleted.",
-    //         icon: "success",
-    //       });
-    //       // deleteCart(id);
-    //     }
-    //   });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedCartData = cartData.filter((item: any) => item._id !== id);
+
+        // Update localStorage with the new cart data
+        localStorage.setItem("cartProducts", JSON.stringify(updatedCartData));
+        cartData = updatedCartData;
+        navigate("/cart");
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
   };
 
   const handleLoginShowl = () => {
@@ -109,7 +115,10 @@ const Cart = () => {
               </p>
               <p className="text-xl font-semibold">Total Price: {totalPrice}</p>
               {user && (
-                <Link className="btn btn-sm bg-green-600 text-white" to="/user-info">
+                <Link
+                  className="btn btn-sm bg-green-600 text-white"
+                  to="/user-info"
+                >
                   Buy Now
                 </Link>
               )}
