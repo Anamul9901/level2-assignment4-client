@@ -1,32 +1,63 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-empty-pattern */
 import { useParams } from "react-router-dom";
 import { useGetSingleProductQuery } from "../../redux/features/products/products";
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 const SingleProduct = () => {
   const { id } = useParams();
+  const [cartQuantity, setCartQuantity] = useState(1);
 
   const { data } = useGetSingleProductQuery(id);
-  const cartData = data?.data;
-  console.log(cartData);
+  const cartData = { ...data?.data, cartQuantity };
 
-  console.log(cartData?.quantity);
   const handleAddToCart = async () => {
     const existingCartProducts =
       JSON.parse(localStorage.getItem("cartProducts") as string) || [];
 
-    const updatedCartProducts = [...existingCartProducts, cartData];
-    console.log(updatedCartProducts);
-    if (cartData?.quantity > 0) {
-      localStorage.setItem("cartProducts", JSON.stringify(updatedCartProducts));
+    // if(existingCartProducts?.length > 0){
+    const sameData = existingCartProducts?.filter(
+      (item: any) => item?._id == data?.data?._id
+    );
+    const itemIndex = existingCartProducts?.findIndex(
+      (item: any) => item?._id == data?.data?._id
+    );
+    if (sameData?.length > 0) {
+      const updateCartQuantity = sameData[0]?.cartQuantity + 1;
 
+      const indexCartQuantity = (existingCartProducts[itemIndex].cartQuantity =
+        updateCartQuantity);
+      setCartQuantity(updateCartQuantity);
+      localStorage.setItem(
+        "cartProducts",
+        JSON.stringify(existingCartProducts)
+      );
       Swal.fire({
         position: "top-end",
         icon: "success",
-        title: "This Product added in cart",
+        title: `${indexCartQuantity} same products added in cart`,
         showConfirmButton: false,
         timer: 1500,
       });
+    }
+    // }
+
+    const updatedCartProducts = [...existingCartProducts, cartData];
+    if (cartData?.quantity > 0) {
+      if (sameData?.length == 0) {
+        localStorage.setItem(
+          "cartProducts",
+          JSON.stringify(updatedCartProducts)
+        );
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "This Product added in cart",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     } else {
       Swal.fire({
         position: "top-end",

@@ -16,11 +16,12 @@ const Product = () => {
   const navigate = useNavigate();
   const [productId, setProductId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [finalProducts, setFinalProducts] = useState([]);
   const [selectUpdatedProduct, setSelectUpdatedProduct] = useState();
   const [defaultCategory, setDefaultCategory] = useState();
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const searchData = { searchTerm, limit, page };
   const { data } = useGetAllProductQuery(searchData);
@@ -76,7 +77,7 @@ const Product = () => {
 
   const handleUpdatePrductId = (id: any) => {
     setProductId(id);
-    setDefaultCategory(undefined)
+    setDefaultCategory(undefined);
   };
 
   const handleProductUpdate = async (e: any) => {
@@ -142,6 +143,7 @@ const Product = () => {
       (item: any) => item?.category == data
     );
     setFinalProducts(filterProducts);
+    setSelectedCategory(data);
   };
 
   return (
@@ -178,10 +180,31 @@ const Product = () => {
 
       {/* catagory button  */}
       <div className="pb-1">
-        <div className="flex gap-3 bg-green-200 px-2 rounded-md w-44 justify-center font-semibold ">
-          <button onClick={() => handleCatagory("Flower")}>Flower</button>
-          <button onClick={() => handleCatagory("Fruit")}>Fruit</button>
-          <button onClick={() => handleCatagory("Timber")}>Timber</button>
+        <div className="flex gap-3 bg-green-200 px-2 rounded-md w-52 justify-center font-semibold ">
+          <button
+            onClick={() => handleCatagory("Flower")}
+            className={`px-2 btn-sm py-1 rounded-md ${
+              selectedCategory === "Flower" && "bg-green-500 text-white"
+            }`}
+          >
+            Flower
+          </button>
+          <button
+            onClick={() => handleCatagory("Fruit")}
+            className={`px-2 py-1 btn-sm rounded-md ${
+              selectedCategory === "Fruit" && "bg-green-500 text-white"
+            }`}
+          >
+            Fruit
+          </button>
+          <button
+            onClick={() => handleCatagory("Timber")}
+            className={`px-2 py-1 btn-sm rounded-md ${
+              selectedCategory === "Timber" && "bg-green-500 text-white"
+            }`}
+          >
+            Timber
+          </button>
         </div>
       </div>
       <div className=" ">
@@ -276,7 +299,8 @@ const Product = () => {
                             className="select select-bordered w-full max-w-xs"
                             name="category"
                             value={
-                              defaultCategory || (selectUpdatedProduct as any)?.category
+                              defaultCategory ||
+                              (selectUpdatedProduct as any)?.category
                             }
                             onChange={(e) => {
                               setDefaultCategory(e?.target?.value as any);
@@ -301,7 +325,9 @@ const Product = () => {
                             placeholder="Quantity"
                             className="input input-bordered w-full max-w-xs"
                             name="quantity"
-                            defaultValue={(selectUpdatedProduct as any)?.quantity}
+                            defaultValue={
+                              (selectUpdatedProduct as any)?.quantity
+                            }
                           />
                         </div>
 
