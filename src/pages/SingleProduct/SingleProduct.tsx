@@ -28,6 +28,8 @@ const SingleProduct = () => {
 
       const indexCartQuantity = (existingCartProducts[itemIndex].cartQuantity =
         updateCartQuantity);
+      existingCartProducts[itemIndex].price =
+        updateCartQuantity * data?.data?.price;
       setCartQuantity(updateCartQuantity);
       localStorage.setItem(
         "cartProducts",

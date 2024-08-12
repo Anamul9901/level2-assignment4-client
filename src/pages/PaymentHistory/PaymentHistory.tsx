@@ -7,9 +7,10 @@ const PaymentHistory = () => {
   const user = useAppSelector(selectCurrentUser);
   const getAllBuyInfo = useGetAllBuyInfoQuery(user?.email);
   const paymentInfo = getAllBuyInfo?.data?.data;
+  console.log(paymentInfo);
   return (
     <div className="h-[100vh] max-w-7xl mx-auto w-full">
-      {user && (
+      {/* {user && ( */}
         <div>
           <h1 className="text-3xl font-semibold text-center py-10">
             Your Order Information
@@ -41,7 +42,7 @@ const PaymentHistory = () => {
             </table>
           </div>
         </div>
-      )}
+      {/* )} */}
     </div>
   );
 };

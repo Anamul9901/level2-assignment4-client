@@ -12,6 +12,7 @@ import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useAddBuyInfoMutation } from "../../redux/features/buyInfo/buyInfo";
+import { useUpdateProductsQuantityMutation } from "../../redux/features/products/products";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const CheckoutForm = () => {
@@ -26,9 +27,7 @@ const CheckoutForm = () => {
   const [addBuyInfo, {}] = useAddBuyInfoMutation();
 
   const cartData = data?.data;
-  // console.log(cartData);
   const user = useAppSelector(selectCurrentUser);
-  // console.log(user);
 
   const currentUserCart = cartData?.filter(
     (cart: any) => cart.userId == user?._id
@@ -37,6 +36,7 @@ const CheckoutForm = () => {
   const localCartData = JSON.parse(
     localStorage.getItem("cartProducts") as string
   );
+  const localUserData = JSON.parse(localStorage.getItem("userData") as string);
 
   let totalPrice = 0;
   for (let i = 0; i < localCartData?.length; i++) {
@@ -45,6 +45,11 @@ const CheckoutForm = () => {
 
   const [createPayment, {}] = useCreatePaymentMutation();
   const [createUserPayData, {}] = useCreateUserPayDataMutation();
+  const [updateProductsQuantity, {}] = useUpdateProductsQuantityMutation();
+  const cartQuantitysAndIds = localCartData?.map((product: any) => ({
+    _id: product?._id,
+    quantity: product?.quantity - product?.cartQuantity,
+  }));
 
   const totalPriceObjet = { amount: totalPrice };
 
@@ -64,24 +69,24 @@ const CheckoutForm = () => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (!user) {
-      Swal.fire({
-        title: "You are not Lonin?",
-        text: "Are you want to login!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Login page",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate("/login");
-        }
-      });
-    }
-    if (!user) {
-      throw new Error("You are not login");
-    }
+    // if (!user) {
+    //   Swal.fire({
+    //     title: "You are not Lonin?",
+    //     text: "Are you want to login!",
+    //     icon: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonColor: "#3085d6",
+    //     cancelButtonColor: "#d33",
+    //     confirmButtonText: "Login page",
+    //   }).then((result) => {
+    //     if (result.isConfirmed) {
+    //       navigate("/login");
+    //     }
+    //   });
+    // }
+    // if (!user) {
+    //   throw new Error("You are not login");
+    // }
     if (!stripe || !elements) {
       return;
     }
@@ -117,19 +122,17 @@ const CheckoutForm = () => {
         payment_method: {
           card: card,
           billing_details: {
-            email: user?.email || "anonymous",
-            name: user?.name || "anonymous",
+            email: localUserData?.email || user?.email,
+            name: localUserData?.name || user?.name,
           },
         },
       });
-
     if (confirmError) {
       // console.log("confirm error");
     } else {
       // console.log("Pyment intent", paymentIntent);
       setTransctionId("");
       if (paymentIntent?.status === "succeeded") {
-        // console.log("transaction id", paymentIntent.id);
         setTransctionId(paymentIntent?.id);
 
         //now save the payment in the database
@@ -140,15 +143,13 @@ const CheckoutForm = () => {
           cartId: allCartId,
           status: "pending",
         };
-
         await createUserPayData(payment);
-        // console.log("user save data", res);
       }
     }
-
+    await updateProductsQuantity(cartQuantitysAndIds);
     const userInfo = JSON.parse(localStorage.getItem("userData") as any);
     userInfo.paymentType = "Online";
-    console.log(userInfo);
+    userInfo.transactionId = transctionId;
     const res = await addBuyInfo(userInfo);
     if (res?.data) {
       localStorage.removeItem("userData");

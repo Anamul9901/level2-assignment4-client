@@ -58,7 +58,7 @@ const Navber = () => {
           Add-Product
         </NavLink>
       </li>
-      {user && (
+      {/* {user && ( */}
         <li>
           <NavLink
             to="/pay-history"
@@ -73,7 +73,7 @@ const Navber = () => {
             Ordered
           </NavLink>
         </li>
-      )}
+      {/* )} */}
     </>
   );
   return (

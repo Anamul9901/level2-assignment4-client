@@ -1,3 +1,4 @@
+/* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Elements } from "@stripe/react-stripe-js";
@@ -6,22 +7,34 @@ import CheckoutForm from "./CheckoutForm";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useAddBuyInfoMutation } from "../../redux/features/buyInfo/buyInfo";
+import { useUpdateProductsQuantityMutation } from "../../redux/features/products/products";
 
 const Payment = () => {
   const navigate = useNavigate();
   const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway);
   // console.log(stripePromise);
 
-  const [addBuyInfo, { isError }] = useAddBuyInfoMutation();
+  const [addBuyInfo, {}] = useAddBuyInfoMutation();
+  const [updateProductsQuantity, {}] = useUpdateProductsQuantityMutation();
+
+  const cartData = JSON.parse(localStorage.getItem("cartProducts") as string);
+  const cartQuantitysAndIds = cartData?.map((product: any) => ({
+    _id: product?._id,
+    quantity: product?.quantity - product?.cartQuantity,
+  }));
+
+  console.log("cart quantity1-", cartQuantitysAndIds);
+
 
   const handleSaveUserInfo = async () => {
+    await updateProductsQuantity(cartQuantitysAndIds);
     const paymentType = "Cash On";
     const userData = JSON.parse(localStorage.getItem("userData") as any);
     userData.paymentType = paymentType;
-    console.log('userdata', userData);
     const res = await addBuyInfo(userData);
     if (res?.data) {
       console.log("res", res);
+
       Swal.fire({
         position: "top-end",
         icon: "success",

@@ -10,8 +10,16 @@ import { useEffect } from "react";
 const Cart = () => {
   const navigate = useNavigate();
   let cartData = JSON.parse(localStorage.getItem("cartProducts") as string);
+  console.log("data", cartData);
 
-  const user = useAppSelector(selectCurrentUser);
+  const cartQuantitysAndIds = cartData?.map((product: any) => ({
+    _id: product?._id,
+    quantity: product?.quantity - product?.cartQuantity,
+  }));
+
+  console.log("cart quantity-", cartQuantitysAndIds);
+
+  // const user = useAppSelector(selectCurrentUser);
 
   let totalPrice = 0;
   for (let i = 0; i < cartData?.length; i++) {
@@ -114,22 +122,22 @@ const Cart = () => {
                 Total Item: {cartData?.length || 0}
               </p>
               <p className="text-xl font-semibold">Total Price: {totalPrice}</p>
-              {user && (
-                <Link
-                  className="btn btn-sm bg-green-600 text-white"
-                  to="/user-info"
-                >
-                  Buy Now
-                </Link>
-              )}
-              {!user && (
+              {/* {user && ( */}
+              <Link
+                className="btn btn-sm bg-green-600 text-white"
+                to="/user-info"
+              >
+                Buy Now
+              </Link>
+              {/* )} */}
+              {/* {!user && (
                 <div
                   onClick={handleLoginShowl}
                   className="btn btn-sm bg-green-600 text-white"
                 >
                   Buy Now
                 </div>
-              )}
+              )} */}
             </div>
           </div>
           <div className="md:w-[50%]">
@@ -153,8 +161,11 @@ const Cart = () => {
                           <h2 className="text-lg font-semibold ">
                             {cartDat?.name}
                           </h2>
+                          <h2 className=" ">
+                            Quantity: {cartDat?.cartQuantity}
+                          </h2>
                           <p>
-                            Price:{" "}
+                            Total Price:{" "}
                             <span className="font-bold text-lg text-[#f76b00]">
                               {cartDat?.price}
                             </span>
