@@ -10,14 +10,14 @@ import { useEffect } from "react";
 const Cart = () => {
   const navigate = useNavigate();
   let cartData = JSON.parse(localStorage.getItem("cartProducts") as string);
-  console.log("data", cartData);
+  // console.log("data", cartData);
 
   const cartQuantitysAndIds = cartData?.map((product: any) => ({
     _id: product?._id,
     quantity: product?.quantity - product?.cartQuantity,
   }));
 
-  console.log("cart quantity-", cartQuantitysAndIds);
+  // console.log("cart quantity-", cartQuantitysAndIds);
 
   // const user = useAppSelector(selectCurrentUser);
 

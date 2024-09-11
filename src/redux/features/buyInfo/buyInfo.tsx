@@ -23,7 +23,11 @@ const buyInfoApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["product"],
     }),
+
   }),
 });
 
-export const { useGetAllBuyInfoQuery, useAddBuyInfoMutation } = buyInfoApi;
+export const {
+  useGetAllBuyInfoQuery,
+  useAddBuyInfoMutation,
+} = buyInfoApi;

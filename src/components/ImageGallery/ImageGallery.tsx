@@ -14,8 +14,8 @@ const images = [
 const ImageGallery = () => {
   const [data, setData] = useState({ img: "", i: 0 });
   const viewPage = (img: string, i: number) => {
-    console.log(img, i);
-    console.log(data);
+    // console.log(img, i);
+    // console.log(data);
     setData({ img, i });
     (document as any).getElementById("my_modal_4").showModal()
   };

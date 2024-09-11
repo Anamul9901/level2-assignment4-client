@@ -23,17 +23,18 @@ const Payment = () => {
     quantity: product?.quantity - product?.cartQuantity,
   }));
 
-  console.log("cart quantity1-", cartQuantitysAndIds);
-
+  // console.log("cart quantity1-", cartQuantitysAndIds);
 
   const handleSaveUserInfo = async () => {
     await updateProductsQuantity(cartQuantitysAndIds);
     const paymentType = "Cash On";
     const userData = JSON.parse(localStorage.getItem("userData") as any);
     userData.paymentType = paymentType;
+    // console.log("userData------>>", userData);
     const res = await addBuyInfo(userData);
+    // console.log("res---->>", res);
     if (res?.data) {
-      console.log("res", res);
+      // console.log("res", res);
 
       Swal.fire({
         position: "top-end",

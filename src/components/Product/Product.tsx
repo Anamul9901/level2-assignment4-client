@@ -25,6 +25,7 @@ const Product = () => {
 
   const searchData = { searchTerm, limit, page };
   const { data } = useGetAllProductQuery(searchData);
+  // console.log("data", data);
   const products = data?.data?.fieldQuery;
   useEffect(() => {
     setFinalProducts(products);
@@ -148,202 +149,206 @@ const Product = () => {
 
   return (
     <div className="py-16 mb-10">
-      <div className="flex justify-end items-center gap-3">
-        <div>
-          <Link
-            to={"/add-product"}
-            className="btn p-1 bg-green-400 rounded-md text-white font-bold"
+      <div className="flex justify-end items-center gap-4 mb-6">
+        <Link
+          to="/add-product"
+          className="btn px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg shadow-md transition-all"
+        >
+          Add Product
+        </Link>
+
+        <form onSubmit={handleSearch} className="flex items-center">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search Products..."
+            className="input input-bordered border-green-400 focus:outline-none rounded-l-md w-full max-w-xs"
+          />
+          <button
+            type="submit"
+            className="btn bg-green-500 hover:bg-green-600 text-white px-4 rounded-r-md transition-all"
           >
-            Add Product
-          </Link>
-        </div>
-        <form onSubmit={handleSearch}>
-          <div className="flex items-center">
-            <input
-              type="text"
-              name="search"
-              placeholder="Type here"
-              className="input border border-green-300 rounded-r-none w-full max-w-xs"
-            />
-            <button
-              type="submit"
-              className="btn border-green-300 rounded-l-none"
-            >
-              <IoSearchSharp />
-            </button>
-          </div>
+            <IoSearchSharp size={20} />
+          </button>
         </form>
       </div>
-      <h2 className="md:text-4xl text-xl pb-10 text-center font-bold">
-        All Product
+
+      <h2 className="md:text-4xl text-2xl font-bold text-center mb-8 text-gray-800">
+        All Products
       </h2>
 
-      {/* catagory button  */}
-      <div className="pb-1">
-        <div className="flex gap-3 bg-green-200 px-2 rounded-md w-52 justify-center font-semibold ">
-          <button
-            onClick={() => handleCatagory("Flower")}
-            className={`px-2 btn-sm py-1 rounded-md ${
-              selectedCategory === "Flower" && "bg-green-500 text-white"
-            }`}
-          >
-            Flower
-          </button>
-          <button
-            onClick={() => handleCatagory("Fruit")}
-            className={`px-2 py-1 btn-sm rounded-md ${
-              selectedCategory === "Fruit" && "bg-green-500 text-white"
-            }`}
-          >
-            Fruit
-          </button>
-          <button
-            onClick={() => handleCatagory("Timber")}
-            className={`px-2 py-1 btn-sm rounded-md ${
-              selectedCategory === "Timber" && "bg-green-500 text-white"
-            }`}
-          >
-            Timber
-          </button>
-        </div>
+      {/* Category Buttons */}
+      <div className="flex justify-center gap-4 mb-6">
+        <button
+          onClick={() => handleCatagory("Flower")}
+          className={`px-4 py-2 font-semibold btn-sm rounded-lg transition-all ${
+            selectedCategory === "Flower"
+              ? "bg-green-500 text-white"
+              : "bg-green-200 text-green-700"
+          }`}
+        >
+          Flower
+        </button>
+        <button
+          onClick={() => handleCatagory("Fruit")}
+          className={`px-4 py-2 btn-sm font-semibold rounded-lg transition-all ${
+            selectedCategory === "Fruit"
+              ? "bg-green-500 text-white"
+              : "bg-green-200 text-green-700"
+          }`}
+        >
+          Fruit
+        </button>
+        <button
+          onClick={() => handleCatagory("Timber")}
+          className={`px-4 py-2 btn-sm font-semibold rounded-lg transition-all ${
+            selectedCategory === "Timber"
+              ? "bg-green-500 text-white"
+              : "bg-green-200 text-green-700"
+          }`}
+        >
+          Timber
+        </button>
       </div>
+
       <div className=" ">
         <div className="grid  grid-cols-2 px-1 md:px-0 md:grid-cols-4 lg:grid-cols-5 gap-3  ">
           {finalProducts?.map((product: any) => (
-            <div key={product?._id}>
-              <div className=" bg-base-100 shadow-xl  h-full">
-                <Link to={`/product/${product?._id}`}>
-                  <figure>
-                    <img src={product.image} alt="" />
-                  </figure>
-                  <div className="flex items-center pb-3 ">
-                    <div className="px-3">
-                      <h2 className="text-xl font-semibold ">{product.name}</h2>
-                      <p>{product.title}</p>
-                      <p>
-                        Price:{" "}
-                        <span className="font-bold text-lg text-[#f76b00]">
-                          {product.price}
-                        </span>
-                      </p>
-                      <p>
-                        Quantity:{" "}
-                        <span className="font-bold text-lg text-[#f76b00]">
-                          {product.quantity}
-                        </span>
-                      </p>
-                    </div>
+            <div
+              key={product?._id}
+              className="bg-white shadow-md rounded-lg overflow-hidden"
+            >
+              <Link to={`/product/${product?._id}`}>
+                <figure className="relative w-full h-64">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </figure>
+                <div className="p-4">
+                  <h2 className="text-xl font-bold text-gray-800">
+                    {product.name}
+                  </h2>
+                  <p className="text-gray-600 mt-1">{product.title}</p>
+                  <p className="text-gray-600 mt-1">
+                    Rating: ⭐ {product.rating}
+                  </p>
+                  <div className="flex justify-between items-center mt-4">
+                    <p className="text-lg font-semibold text-[#f76b00]">
+                      Price: ${product.price}
+                    </p>
+                    <p className="text-lg font-semibold text-gray-700">
+                      Qty: {product.quantity}
+                    </p>
                   </div>
-                </Link>
-                <div className="flex justify-center gap-3 pb-2">
+                </div>
+              </Link>
+
+              <div className="flex justify-between items-center px-4 py-3 bg-gray-100">
+                <button
+                  onClick={() => handleProductDelete(product?._id)}
+                  className="text-white bg-red-500 hover:bg-red-600 font-semibold px-4 py-2 rounded-md transition-colors"
+                >
+                  Delete
+                </button>
+
+                <div onClick={() => handleUpdatePrductId(product?._id)}>
                   <button
-                    onClick={() => handleProductDelete(product?._id)}
-                    className="btn-primary btn-sm bg-red-400 rounded-md text-white font-semibold"
+                    className="text-white bg-green-500 hover:bg-green-600 font-semibold px-4 py-2 rounded-md transition-colors"
+                    onClick={() =>
+                      (document as any)
+                        .getElementById("my_modal_3")
+                        .showModal(product._id)
+                    }
                   >
-                    Delete
+                    Update
                   </button>
-
-                  {/* --------------product update modal------------- */}
-                  {/* You can open the modal using document.getElementById('ID').showModal() method */}
-                  <div onClick={() => handleUpdatePrductId(product?._id)}>
-                    <button
-                      className="btn-primary btn-sm bg-green-400 rounded-md text-white font-semibold"
-                      onClick={() =>
-                        (document as any)
-                          .getElementById("my_modal_3")
-                          .showModal(product._id)
-                      }
-                    >
-                      Update
-                    </button>
-                  </div>
-                  <dialog id="my_modal_3" className="modal">
-                    <div className="modal-box">
-                      <form method="dialog">
-                        {/* if there is a button in form, it will close the modal */}
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                          ✕
-                        </button>
-                      </form>
-                      <h3 className="font-bold text-lg">Hello!</h3>
-                      <p className="py-4">
-                        Press ESC key or click on ✕ button to close
-                      </p>
-                      <form onSubmit={handleProductUpdate}>
-                        <div className="flex gap-1 pb-3">
-                          <input
-                            type="text"
-                            placeholder="Product Name"
-                            className="input input-bordered w-full max-w-xs"
-                            name="name"
-                            defaultValue={(selectUpdatedProduct as any)?.name}
-                          />
-                          <input
-                            type="text"
-                            placeholder="Product Title"
-                            className="input input-bordered w-full max-w-xs"
-                            name="title"
-                            defaultValue={(selectUpdatedProduct as any)?.title}
-                          />
-                        </div>
-
-                        <div className="flex gap-1 pb-3">
-                          <input
-                            type="img"
-                            placeholder="Img URL"
-                            className="input input-bordered w-full max-w-xs"
-                            name="image"
-                            defaultValue={(selectUpdatedProduct as any)?.image}
-                          />
-                          <select
-                            className="select select-bordered w-full max-w-xs"
-                            name="category"
-                            value={
-                              defaultCategory ||
-                              (selectUpdatedProduct as any)?.category
-                            }
-                            onChange={(e) => {
-                              setDefaultCategory(e?.target?.value as any);
-                            }}
-                          >
-                            <option value="Flower">Flower</option>
-                            <option value="Fruit">Fruit</option>
-                            <option value="Timber">Timber</option>
-                          </select>
-                        </div>
-
-                        <div className="flex gap-1 pb-3">
-                          <input
-                            type="number"
-                            placeholder="Price"
-                            className="input input-bordered w-full max-w-xs"
-                            name="price"
-                            defaultValue={(selectUpdatedProduct as any)?.price}
-                          />
-                          <input
-                            type="number"
-                            placeholder="Quantity"
-                            className="input input-bordered w-full max-w-xs"
-                            name="quantity"
-                            defaultValue={
-                              (selectUpdatedProduct as any)?.quantity
-                            }
-                          />
-                        </div>
-
-                        <div className="flex justify-end">
-                          <button
-                            type="submit"
-                            className="btn-primary btn-sm bg-green-400 rounded-md text-white font-semibol"
-                          >
-                            Update
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </dialog>
                 </div>
               </div>
+
+              {/* Update Modal */}
+              <dialog id="my_modal_3" className="modal">
+                <div className="modal-box rounded-lg p-6">
+                  <form method="dialog">
+                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                      ✕
+                    </button>
+                  </form>
+                  <h3 className="font-bold text-xl text-gray-800 mb-4">
+                    Update Product
+                  </h3>
+                  <form onSubmit={handleProductUpdate}>
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <input
+                        type="text"
+                        placeholder="Product Name"
+                        className="input input-bordered w-full"
+                        name="name"
+                        defaultValue={(selectUpdatedProduct as any)?.name}
+                      />
+                      <input
+                        type="text"
+                        placeholder="Product Title"
+                        className="input input-bordered w-full"
+                        name="title"
+                        defaultValue={(selectUpdatedProduct as any)?.title}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <input
+                        type="url"
+                        placeholder="Image URL"
+                        className="input input-bordered w-full"
+                        name="image"
+                        defaultValue={(selectUpdatedProduct as any)?.image}
+                      />
+                      <select
+                        className="select select-bordered w-full"
+                        name="category"
+                        value={
+                          defaultCategory ||
+                          (selectUpdatedProduct as any)?.category
+                        }
+                        onChange={(e) =>
+                          setDefaultCategory((e as any).target.value)
+                        }
+                      >
+                        <option value="Flower">Flower</option>
+                        <option value="Fruit">Fruit</option>
+                        <option value="Timber">Timber</option>
+                      </select>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <input
+                        type="number"
+                        placeholder="Price"
+                        className="input input-bordered w-full"
+                        name="price"
+                        defaultValue={(selectUpdatedProduct as any)?.price}
+                      />
+                      <input
+                        type="number"
+                        placeholder="Quantity"
+                        className="input input-bordered w-full"
+                        name="quantity"
+                        defaultValue={(selectUpdatedProduct as any)?.quantity}
+                      />
+                    </div>
+
+                    <div className="flex justify-end">
+                      <button
+                        type="submit"
+                        className="text-white bg-green-500 hover:bg-green-600 font-semibold px-4 py-2 rounded-md transition-colors"
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </dialog>
             </div>
           ))}
         </div>
