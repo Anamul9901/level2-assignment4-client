@@ -1,8 +1,6 @@
 /* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Link, useNavigate } from "react-router-dom";
-import { selectCurrentUser } from "../../redux/features/auth/authSlice";
-import { useAppSelector } from "../../redux/hooks";
 import Swal from "sweetalert2";
 import { useEffect } from "react";
 
@@ -12,10 +10,10 @@ const Cart = () => {
   let cartData = JSON.parse(localStorage.getItem("cartProducts") as string);
   // console.log("data", cartData);
 
-  const cartQuantitysAndIds = cartData?.map((product: any) => ({
-    _id: product?._id,
-    quantity: product?.quantity - product?.cartQuantity,
-  }));
+  // const cartQuantitysAndIds = cartData?.map((product: any) => ({
+  //   _id: product?._id,
+  //   quantity: product?.quantity - product?.cartQuantity,
+  // }));
 
   // console.log("cart quantity-", cartQuantitysAndIds);
 
@@ -82,21 +80,22 @@ const Cart = () => {
     });
   };
 
-  const handleLoginShowl = () => {
-    Swal.fire({
-      title: "You are not Lonin?",
-      text: "Are you want to login!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Login page",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate("/login");
-      }
-    });
-  };
+  // const handleLoginShowl = () => {
+  //   Swal.fire({
+  //     title: "You are not Lonin?",
+  //     text: "Are you want to login!",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Login page",
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       navigate("/login");
+  //     }
+  //   });
+  // };
+
   if (!cartData) {
     return (
       <div className="h-screen">

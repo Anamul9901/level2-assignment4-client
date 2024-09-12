@@ -117,15 +117,11 @@ const Product = () => {
   };
 
   const handlePrevPage = () => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
+    if (page > 1) setPage(page - 1);
   };
 
   const handleNextPage = () => {
-    if (page < numberOfPages) {
-      setPage(page + 1);
-    }
+    if (page < numberOfPages) setPage(page + 1);
   };
 
   const handleItemsPerPage = (e: any) => {
@@ -135,7 +131,7 @@ const Product = () => {
   };
 
   const setCurrentPage = (page: number) => {
-    setPage(page + 1);
+    setPage(page);
   };
 
   // catagory button handler
@@ -145,6 +141,25 @@ const Product = () => {
     );
     setFinalProducts(filterProducts);
     setSelectedCategory(data);
+  };
+
+  const handleSort = (sortBy: string) => {
+    const sortedProducts = [...finalProducts];
+
+    if (sortBy === "price") {
+      sortedProducts.sort((a: any, b: any) => a.price - b.price); // Ascending by price
+    } else if (sortBy === "name") {
+      sortedProducts.sort((a: any, b: any) => a.name.localeCompare(b.name)); // Ascending by name
+    } else if (sortBy === "rating") {
+      sortedProducts.sort((a: any, b: any) => {
+        // Ensure rating is a number and handle missing ratings
+        const ratingA = a.rating || 0;
+        const ratingB = b.rating || 0;
+        return ratingB - ratingA; // Descending by rating
+      });
+    }
+
+    setFinalProducts(sortedProducts);
   };
 
   return (
@@ -177,42 +192,59 @@ const Product = () => {
         All Products
       </h2>
 
-      {/* Category Buttons */}
-      <div className="flex justify-center gap-4 mb-6">
-        <button
-          onClick={() => handleCatagory("Flower")}
-          className={`px-4 py-2 font-semibold btn-sm rounded-lg transition-all ${
-            selectedCategory === "Flower"
-              ? "bg-green-500 text-white"
-              : "bg-green-200 text-green-700"
-          }`}
-        >
-          Flower
-        </button>
-        <button
-          onClick={() => handleCatagory("Fruit")}
-          className={`px-4 py-2 btn-sm font-semibold rounded-lg transition-all ${
-            selectedCategory === "Fruit"
-              ? "bg-green-500 text-white"
-              : "bg-green-200 text-green-700"
-          }`}
-        >
-          Fruit
-        </button>
-        <button
-          onClick={() => handleCatagory("Timber")}
-          className={`px-4 py-2 btn-sm font-semibold rounded-lg transition-all ${
-            selectedCategory === "Timber"
-              ? "bg-green-500 text-white"
-              : "bg-green-200 text-green-700"
-          }`}
-        >
-          Timber
-        </button>
+      <div className="items-center md:px-4 px-1">
+        {/* Filtering and Sorting */}
+        <div className="flex justify-between items-center mb-4 md:gap-4">
+          {/* Sorting */}
+          <div className="flex">
+            <select
+              onChange={(e) => handleSort(e.target.value)}
+              className="px-2 py-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200"
+            >
+              <option value="name">Sort by Name</option>
+              <option value="price">Sort by Price</option>
+              <option value="rating">Sort by Rating</option>
+            </select>
+          </div>
+
+          {/* Category Buttons */}
+          <div className="flex md:gap-4 gap-1">
+            <button
+              onClick={() => handleCatagory("Flower")}
+              className={`px-4 font-semibold btn-sm rounded-lg transition-all ${
+                selectedCategory === "Flower"
+                  ? "bg-green-500 text-white"
+                  : "bg-green-200 text-green-700"
+              }`}
+            >
+              Flower
+            </button>
+            <button
+              onClick={() => handleCatagory("Fruit")}
+              className={`md:px-4  btn-sm font-semibold rounded-lg transition-all ${
+                selectedCategory === "Fruit"
+                  ? "bg-green-500 text-white"
+                  : "bg-green-200 text-green-700"
+              }`}
+            >
+              Fruit
+            </button>
+            <button
+              onClick={() => handleCatagory("Timber")}
+              className={`px-4  btn-sm font-semibold rounded-lg transition-all ${
+                selectedCategory === "Timber"
+                  ? "bg-green-500 text-white"
+                  : "bg-green-200 text-green-700"
+              }`}
+            >
+              Timber
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className=" ">
-        <div className="grid  grid-cols-2 px-1 md:px-0 md:grid-cols-4 lg:grid-cols-5 gap-3  ">
+        <div className="grid grid-cols-2 px-1 md:px-0 md:grid-cols-4 lg:grid-cols-5 gap-3  ">
           {finalProducts?.map((product: any) => (
             <div
               key={product?._id}
@@ -352,50 +384,52 @@ const Product = () => {
             </div>
           ))}
         </div>
-        {/* pagination button */}
-        <div className="flex justify-center items-center pt-10">
-          <div className="paginatio">
-            <p className="text-center ">Current Page: {page}</p>
-
+        {/* Pagination */}
+        <div className="mt-8 flex justify-center items-center">
+          <button
+            onClick={handlePrevPage}
+            disabled={page === 1}
+            className={`btn mr-4 ${
+              page === 1 ? "opacity-50" : "hover:bg-green-500"
+            }`}
+          >
+            Prev
+          </button>
+          {pages.map((pageNum) => (
             <button
-              onClick={handlePrevPage}
-              className="btn btn-sm bg-green-300"
+              key={pageNum}
+              onClick={() => setCurrentPage(pageNum + 1)}
+              className={`btn mx-1 ${
+                page === pageNum + 1 ? "bg-green-500" : ""
+              }`}
             >
-              Prev
+              {pageNum + 1}
             </button>
-            {pages.map((page) => (
-              <button
-                // ${page === page ? "selected" : 'btn'}
-                className={`btn btn-sm ${
-                  page == page ? "bg-green-400" : undefined
-                }`}
-                onClick={() => setCurrentPage(page)}
-                key={page}
-              >
-                {page + 1}
-              </button>
-            ))}
-            <button
-              className="btn btn-sm bg-green-300"
-              onClick={handleNextPage}
-            >
-              Next
-            </button>
+          ))}
+          <button
+            onClick={handleNextPage}
+            disabled={page === numberOfPages}
+            className={`btn ml-4 ${
+              page === numberOfPages ? "opacity-50" : "hover:bg-green-500"
+            }`}
+          >
+            Next
+          </button>
+        </div>
 
-            {/* value={itemsPerPage} onChange={handleItemsPerPage} */}
-            <select
-              className="btn btn-sm bg-green-300"
-              value={limit}
-              onChange={handleItemsPerPage}
-              name=""
-              id=""
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-            </select>
-          </div>
+        {/* Items Per Page */}
+        <div className="mt-4 flex justify-center items-center gap-4">
+          <label htmlFor="itemsPerPage">Items per page:</label>
+          <select
+            id="itemsPerPage"
+            onChange={handleItemsPerPage}
+            className="input input-bordered w-16"
+            defaultValue={10}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+          </select>
         </div>
       </div>
     </div>
